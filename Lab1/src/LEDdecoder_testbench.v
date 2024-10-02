@@ -1,3 +1,4 @@
+`timescale 1ns/10ps
 module LEDdecoder_testbench;
     reg [5:0] char;
     wire [6:0] LED;
@@ -20,7 +21,7 @@ module LEDdecoder_testbench;
     initial begin
         $dumpfile("LEDdecoder_testbench.vcd");
         $dumpvars(0, LEDdecoder_testbench);
-        $monitor("char = %d, LED = %b, display = \n%s", char, LED, display);
+        $monitor("time = %.4t, char = %d, LED = %b, display = \n%s", $time, char, LED, display);
         char = 6'd0;
         #10 char = 6'd1;
         #10 char = 6'd2;
@@ -54,6 +55,7 @@ module LEDdecoder_testbench;
         #10 char = 6'd30;
         #10 char = 6'd31;
         #10 char = 6'd32;
+        #10 $finish;
     end
 
 
