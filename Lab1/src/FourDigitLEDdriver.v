@@ -137,7 +137,7 @@ a, b, c, d, e, f, g, dp);
                     an3 = 1'b1;
                 end
             endcase
-            counter = counter + 1;
+            counter = counter + 1'b1;
         end
     end
 

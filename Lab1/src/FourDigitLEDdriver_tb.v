@@ -1,3 +1,4 @@
+`timescale 1ns / 10ps
 module FourDigitLEDdriver_tb;
     reg clk, reset;
     wire [3:0] AN;
