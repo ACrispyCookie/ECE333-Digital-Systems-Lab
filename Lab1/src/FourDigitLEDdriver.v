@@ -4,12 +4,17 @@ a, b, c, d, e, f, g, dp);
     input clk, reset;
     output reg an3, an2, an1, an0;
     output wire a, b, c, d, e, f, g, dp;
+    assign dp = 1'b0;
     reg [3:0] counter;
     reg [5:0] char;
     parameter AN0_OFF = 4'b0010;
     parameter AN1_OFF = 4'b0110;
     parameter AN2_OFF = 4'b1010;
     parameter AN3_OFF = 4'b1110;
+    parameter AN0_CHAR_SET = 4'b0000;
+    parameter AN1_CHAR_SET = 4'b0011;
+    parameter AN2_CHAR_SET = 4'b0111;
+    parameter AN3_CHAR_SET = 4'b1011;
 
 //     MMCME2_BASE #(
 //       .BANDWIDTH("OPTIMIZED"),   // Jitter programming (OPTIMIZED, HIGH, LOW)
@@ -77,42 +82,63 @@ a, b, c, d, e, f, g, dp);
 
     always @(posedge clk or posedge reset) begin
         if (reset == 1'b1) begin
-            counter = 4'b0000;
+            counter <= 4'b0000;
+            char <= 6'd10;
+            an0 <= 1'b1;
+            an1 <= 1'b1;
+            an2 <= 1'b1;
+            an3 <= 1'b1;
+        end else begin
+            case (counter)
+                AN0_CHAR_SET: begin
+                    char <= 6'd19;
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+                AN1_CHAR_SET: begin
+                    char <= 6'd5;
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+                AN2_CHAR_SET: begin
+                    char <= 6'd0;
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+                AN3_CHAR_SET: begin
+                    char <= 6'd23;
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+                AN0_OFF: begin
+                    an0 <= 1'b0;
+                end
+                AN1_OFF: begin
+                    an1 <= 1'b0;
+                end
+                AN2_OFF: begin
+                    an2 <= 1'b0;
+                end
+                AN3_OFF: begin
+                    an3 <= 1'b0;
+                end
+                default: begin
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+            endcase
+            counter = counter + 1;
         end
-
-        case (counter)
-            AN0_OFF: begin
-                an0 = 1'b0;
-                an1 = 1'b1;
-                an2 = 1'b1;
-                an3 = 1'b1;
-            end
-            AN1_OFF: begin
-                an0 = 1'b1;
-                an1 = 1'b0;
-                an2 = 1'b1;
-                an3 = 1'b1;
-            end
-            AN2_OFF: begin
-                an0 = 1'b1;
-                an1 = 1'b0;
-                an2 = 1'b1;
-                an3 = 1'b1;
-            end
-            AN3_OFF: begin
-                an0 = 1'b1;
-                an1 = 1'b1;
-                an2 = 1'b1;
-                an3 = 1'b0;
-            end
-            default: begin
-                an0 = 1'b1;
-                an1 = 1'b1;
-                an2 = 1'b1;
-                an3 = 1'b1;
-                counter = counter + 1;
-            end
-        endcase
     end
 
 

@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module LEDdecoder_testbench;
+module LEDdecoder_tb;
     reg [5:0] char;
     wire [6:0] LED;
     wire CA = LED[6], CB = LED[5], CC = LED[4], CD = LED[3], CE = LED[2], CF = LED[1], CG = LED[0];
@@ -19,9 +19,9 @@ module LEDdecoder_testbench;
     " ", CD ? "dddd" : "    ", " \n"};
 
     initial begin
-        $dumpfile("LEDdecoder_testbench.vcd");
-        $dumpvars(0, LEDdecoder_testbench);
-        $monitor("time = %.4t, char = %d, LED = %b, display = \n%s", $time, char, LED, display);
+        $dumpfile("LEDdecoder_tb.vcd");
+        $dumpvars(0, LEDdecoder_tb);
+        $monitor("time = %t, char = %d, LED = %b, display = \n%s", $time, char, LED, display);
         char = 6'd0;
         #10 char = 6'd1;
         #10 char = 6'd2;
