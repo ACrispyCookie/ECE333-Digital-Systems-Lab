@@ -1,12 +1,13 @@
 module FourDigitLEDdriver(reset, clk, an3, an2, an1, an0,
-a, b, c, d, e, f, g, dp);
+a, b, c, d, e, f, g, dp, counter, reset_prime, reset_sync);
 
     input clk, reset;
     output reg an3, an2, an1, an0;
     output wire a, b, c, d, e, f, g, dp;
-    assign dp = 1'b0;
-    reg [3:0] counter;
+    output reg reset_prime, reset_sync;
+    output reg [3:0] counter;
     reg [5:0] char;
+    assign dp = 1'b0;
     parameter AN0_OFF = 4'b0010;
     parameter AN1_OFF = 4'b0110;
     parameter AN2_OFF = 4'b1010;
@@ -80,55 +81,54 @@ a, b, c, d, e, f, g, dp);
 
     LEDdecoder LEDdecoder_inst (.char(char), .LED({a, b, c, d, e, f, g}));
 
-    always @(posedge clk or posedge reset) begin
-        if (reset == 1'b1) begin
-            counter <= 4'b0000;
-            char <= 6'd10;
-            an0 <= 1'b1;
-            an1 <= 1'b1;
-            an2 <= 1'b1;
-            an3 <= 1'b1;
+    always @(posedge clk)
+    begin
+        reset_prime = reset;
+    end
+
+    always @(posedge clk)
+    begin
+        reset_sync = reset_prime;
+    end
+
+    always @(posedge clk or posedge reset_sync) begin
+        if (reset_sync == 1'b1)
+            counter = 4'b0000;
+        else
+            counter = counter + 1'b1;
+    end
+
+    always @(posedge clk or posedge reset_sync) begin
+        if (reset_sync == 1'b1) begin
+            an0 = 1'b1;
+            an1 = 1'b1;
+            an2 = 1'b1;
+            an3 = 1'b1;
         end else begin
             case (counter)
-                AN0_CHAR_SET: begin
-                    char <= 6'd19;
-                    an0 = 1'b1;
-                    an1 = 1'b1;
-                    an2 = 1'b1;
-                    an3 = 1'b1;
-                end
-                AN1_CHAR_SET: begin
-                    char <= 6'd5;
-                    an0 = 1'b1;
-                    an1 = 1'b1;
-                    an2 = 1'b1;
-                    an3 = 1'b1;
-                end
-                AN2_CHAR_SET: begin
-                    char <= 6'd0;
-                    an0 = 1'b1;
-                    an1 = 1'b1;
-                    an2 = 1'b1;
-                    an3 = 1'b1;
-                end
-                AN3_CHAR_SET: begin
-                    char <= 6'd23;
-                    an0 = 1'b1;
-                    an1 = 1'b1;
-                    an2 = 1'b1;
-                    an3 = 1'b1;
-                end
                 AN0_OFF: begin
-                    an0 <= 1'b0;
+                    an0 = 1'b0;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
                 end
                 AN1_OFF: begin
-                    an1 <= 1'b0;
+                    an0 = 1'b1;
+                    an1 = 1'b0;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
                 end
                 AN2_OFF: begin
-                    an2 <= 1'b0;
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b0;
+                    an3 = 1'b1;
                 end
                 AN3_OFF: begin
-                    an3 <= 1'b0;
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b0;
                 end
                 default: begin
                     an0 = 1'b1;
@@ -137,7 +137,27 @@ a, b, c, d, e, f, g, dp);
                     an3 = 1'b1;
                 end
             endcase
-            counter = counter + 1'b1;
+        end
+    end
+
+    always @(posedge clk or posedge reset_sync) begin
+        if (reset_sync == 1'b1)
+            char = 6'd10;
+        else begin
+            case (counter)
+                AN0_CHAR_SET: begin
+                    char = 6'd19;
+                end
+                AN1_CHAR_SET: begin
+                    char = 6'd5;
+                end
+                AN2_CHAR_SET: begin
+                    char = 6'd0;
+                end
+                AN3_CHAR_SET: begin
+                    char = 6'd23;
+                end
+            endcase
         end
     end
 
