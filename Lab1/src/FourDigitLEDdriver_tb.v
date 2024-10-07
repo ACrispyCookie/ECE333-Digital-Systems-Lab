@@ -56,10 +56,10 @@ module FourDigitLEDdriver_tb;
         // $dumpfile("FourDigitLEDdriver_tb.vcd");
         // $dumpvars(0, FourDigitLEDdriver_tb);
         // $monitor("time = %t, AN = %b, LED = %b\n, display0 = \n%s\n, display1 = \n%s\n, display2 = \n%s\n, display3 = \n%s\n", $time, AN, LED, display0, display1, display2, display3);
-        clk = 0;
-        reset = 1;
-        #15 reset = 0;
-        #500 $finish;
+        clk = 1'b0;
+        #10 reset = 1'b1;
+        #15 reset = 1'b0;
+        #700 $finish;
     end
 
     always begin
