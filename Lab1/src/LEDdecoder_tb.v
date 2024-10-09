@@ -6,17 +6,17 @@ module LEDdecoder_tb;
 
 
     LEDdecoder decoder(char, LED);
-    wire [615:0] display = {" ", CA ? "aaaa" : "    ", " \n", 
-    CF ? "f" : " ", "    ", CB ? "b" : " ", "\n",
-    CF ? "f" : " ", "    ", CB ? "b" : " ", "\n",
-    CF ? "f" : " ", "    ", CB ? "b" : " ", "\n",
-    CF ? "f" : " ", "    ", CB ? "b" : " ", "\n",
-    " ", CG ? "gggg" : "    ", " \n",
-    CE ? "e" : " ", "    ", CC ? "c" : " ", "\n",
-    CE ? "e" : " ", "    ", CC ? "c" : " ", "\n",
-    CE ? "e" : " ", "    ", CC ? "c" : " ", "\n",
-    CE ? "e" : " ", "    ", CC ? "c" : " ", "\n",
-    " ", CD ? "dddd" : "    ", " \n"};
+    wire [615:0] display = {" ", !CA ? "aaaa" : "    ", " \n", 
+    !CF ? "f" : " ", "    ", !CB ? "b" : " ", "\n",
+    !CF ? "f" : " ", "    ", !CB ? "b" : " ", "\n",
+    !CF ? "f" : " ", "    ", !CB ? "b" : " ", "\n",
+    !CF ? "f" : " ", "    ", !CB ? "b" : " ", "\n",
+    " ", !CG ? "gggg" : "    ", " \n",
+    !CE ? "e" : " ", "    ", !CC ? "c" : " ", "\n",
+    !CE ? "e" : " ", "    ", !CC ? "c" : " ", "\n",
+    !CE ? "e" : " ", "    ", !CC ? "c" : " ", "\n",
+    !CE ? "e" : " ", "    ", !CC ? "c" : " ", "\n",
+    " ", !CD ? "dddd" : "    ", " \n"};
 
     initial begin
         $dumpfile("LEDdecoder_tb.vcd");
