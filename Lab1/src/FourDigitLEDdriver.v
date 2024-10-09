@@ -98,60 +98,67 @@ a, b, c, d, e, f, g, dp, counter, reset_prime, reset_sync);
             counter = counter + 1'b1;
     end
 
-    always @(counter) begin
-        case (counter)
-            AN0_OFF: begin
-                an0 = 1'b0;
-                an1 = 1'b1;
-                an2 = 1'b1;
-                an3 = 1'b1;
-            end
-            AN1_OFF: begin
-                an0 = 1'b1;
-                an1 = 1'b0;
-                an2 = 1'b1;
-                an3 = 1'b1;
-            end
-            AN2_OFF: begin
-                an0 = 1'b1;
-                an1 = 1'b1;
-                an2 = 1'b0;
-                an3 = 1'b1;
-            end
-            AN3_OFF: begin
-                an0 = 1'b1;
-                an1 = 1'b1;
-                an2 = 1'b1;
-                an3 = 1'b0;
-            end
-            default: begin
-                an0 = 1'b1;
-                an1 = 1'b1;
-                an2 = 1'b1;
-                an3 = 1'b1;
-            end
-        endcase
+    always @(posedge clk or posedge reset_sync) begin
+        if (reset_sync == 1'b1) begin
+            an0 = 1'b1;
+            an1 = 1'b1;
+            an2 = 1'b1;
+            an3 = 1'b1;
+        end else begin
+            case (counter)
+                AN0_OFF: begin
+                    an0 = 1'b0;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+                AN1_OFF: begin
+                    an0 = 1'b1;
+                    an1 = 1'b0;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+                AN2_OFF: begin
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b0;
+                    an3 = 1'b1;
+                end
+                AN3_OFF: begin
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b0;
+                end
+                default: begin
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+            endcase
+        end
     end
 
-    always @(counter) begin
-        case (counter)
-            AN0_CHAR_SET: char = 6'd19;
-            4'b0001: char = 6'd19;
-            4'b0010: char = 6'd19;
-            AN1_CHAR_SET: char = 6'd5;
-            4'b0100: char = 6'd5;
-            4'b0101: char = 6'd5;
-            4'b0110: char = 6'd5;
-            AN2_CHAR_SET: char = 6'd0;
-            4'b1000: char = 6'd0;
-            4'b1001: char = 6'd0;
-            4'b1010: char = 6'd0;
-            AN3_CHAR_SET: char = 6'd23;
-            4'b1100: char = 6'd23;
-            4'b1101: char = 6'd23;
-            4'b1110: char = 6'd23;
-            4'b1111: char = 6'd19;
-        endcase
+    always @(posedge clk or posedge reset_sync) begin
+        if (reset_sync == 1'b1)
+            char = 6'd10;
+        else begin
+            case (counter)
+                AN0_CHAR_SET: begin
+                    char = 6'd19;
+                end
+                AN1_CHAR_SET: begin
+                    char = 6'd5;
+                end
+                AN2_CHAR_SET: begin
+                    char = 6'd0;
+                end
+                AN3_CHAR_SET: begin
+                    char = 6'd23;
+                end
+            endcase
+        end
     end
 
 
