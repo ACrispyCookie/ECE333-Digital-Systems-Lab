@@ -3,16 +3,18 @@ a, b, c, d, e, f, g, dp, counter, reset_prime, reset_sync);
 
     input clk, reset;
     output reg an3, an2, an1, an0;
-    output wire a, b, c, d, e, f, g, dp;
+    output reg a, b, c, d, e, f, g;
+    output wire dp;
     output reg reset_prime, reset_sync;
     output reg [3:0] counter;
+    wire CA, CB, CC, CD, CE, CF, CG;
     reg [5:0] char;
     assign dp = 1'b0;
     parameter AN0_OFF = 4'b0010;
     parameter AN1_OFF = 4'b0110;
     parameter AN2_OFF = 4'b1010;
     parameter AN3_OFF = 4'b1110;
-    parameter AN0_CHAR_SET = 4'b0000;
+    parameter AN0_CHAR_SET = 4'b1111;
     parameter AN1_CHAR_SET = 4'b0011;
     parameter AN2_CHAR_SET = 4'b0111;
     parameter AN3_CHAR_SET = 4'b1011;
@@ -79,7 +81,7 @@ a, b, c, d, e, f, g, dp, counter, reset_prime, reset_sync);
 //       .CLKFBIN(CLKFBIN)      // 1-bit input: Feedback clock
 //    );
 
-    LEDdecoder LEDdecoder_inst (.char(char), .LED({a, b, c, d, e, f, g}));
+    LEDdecoder LEDdecoder_inst (.char(char), .LED({CA, CB, CC, CD, CE, CF, CG}));
 
     always @(posedge clk)
     begin
@@ -93,44 +95,65 @@ a, b, c, d, e, f, g, dp, counter, reset_prime, reset_sync);
 
     always @(posedge clk or posedge reset_sync) begin
         if (reset_sync == 1'b1)
-            counter = 4'b0000;
+            counter = 4'b1111;
         else
             counter = counter + 1'b1;
     end
 
-    always @(counter) begin
-        case (counter)
-            AN0_OFF: begin
-                an0 = 1'b0;
-                an1 = 1'b1;
-                an2 = 1'b1;
-                an3 = 1'b1;
-            end
-            AN1_OFF: begin
-                an0 = 1'b1;
-                an1 = 1'b0;
-                an2 = 1'b1;
-                an3 = 1'b1;
-            end
-            AN2_OFF: begin
-                an0 = 1'b1;
-                an1 = 1'b1;
-                an2 = 1'b0;
-                an3 = 1'b1;
-            end
-            AN3_OFF: begin
-                an0 = 1'b1;
-                an1 = 1'b1;
-                an2 = 1'b1;
-                an3 = 1'b0;
-            end
-            default: begin
-                an0 = 1'b1;
-                an1 = 1'b1;
-                an2 = 1'b1;
-                an3 = 1'b1;
-            end
-        endcase
+    always @(posedge clk or posedge reset_sync) begin
+        if (reset_sync == 1'b1) begin
+            an0 = 1'b1;
+            an1 = 1'b1;
+            an2 = 1'b1;
+            an3 = 1'b1;
+        end else begin
+            case (counter)
+                AN0_OFF: begin
+                    an0 = 1'b0;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+                AN1_OFF: begin
+                    an0 = 1'b1;
+                    an1 = 1'b0;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+                AN2_OFF: begin
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b0;
+                    an3 = 1'b1;
+                end
+                AN3_OFF: begin
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b0;
+                end
+                default: begin
+                    an0 = 1'b1;
+                    an1 = 1'b1;
+                    an2 = 1'b1;
+                    an3 = 1'b1;
+                end
+            endcase
+        end
+    end
+
+    always @(posedge clk or posedge reset_sync) begin
+        if (reset_sync == 1'b1) begin
+            {a, b, c, d, e, f, g} = 7'b0000000;
+        end else begin
+            a = CA;
+            b = CB;
+            c = CC;
+            d = CD;
+            e = CE;
+            f = CF;
+            g = CG;
+        end
     end
 
     always @(counter) begin
