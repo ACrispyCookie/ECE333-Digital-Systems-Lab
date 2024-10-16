@@ -3,7 +3,7 @@ module FourDigitLEDdriver_tb;
     reg clk, reset;
     wire [3:0] AN;
     wire [3:0] counter;
-    wire CA, CB, CC, CD, CE, CF, CG, dp, reset_prime, reset_sync;
+    wire CA, CB, CC, CD, CE, CF, CG, dp, reset_sync, slow_clk;
     // wire [6:0] LED = {CA, CB, CC, CD, CE, CF, CG};
     // wire [615:0] display0 = AN[0] == 0 ? {" ", CA ? "aaaa" : "    ", " \n", 
     // CF ? "f" : " ", "    ", CB ? "b" : " ", "\n",
@@ -50,7 +50,9 @@ module FourDigitLEDdriver_tb;
     // CE ? "e" : " ", "    ", CC ? "c" : " ", "\n",
     // " ", CD ? "dddd" : "    ", " \n"} : {77{""}};
 
-    FourDigitLEDdriver driver(.clk(clk), .reset(reset), .an3(AN[3]), .an2(AN[2]), .an1(AN[1]), .an0(AN[0]), .a(CA), .b(CB), .c(CC), .d(CD), .e(CE), .f(CF), .g(CG), .dp(dp), .reset_prime(reset_prime), .reset_sync(reset_sync), .counter(counter));
+    FourDigitLEDdriver driver(.clk(clk), .reset(reset), .an3(AN[3]), .an2(AN[2]), .an1(AN[1]), .an0(AN[0]), 
+    .a(CA), .b(CB), .c(CC), .d(CD), .e(CE), .f(CF), .g(CG), .dp(dp), 
+    .reset_sync(reset_sync), .counter(counter), .slow_clk(slow_clk));
 
     initial begin
         // $dumpfile("FourDigitLEDdriver_tb.vcd");
