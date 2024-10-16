@@ -1,5 +1,5 @@
 module FourDigitLEDdriver(reset, clk, an3, an2, an1, an0,
-a, b, c, d, e, f, g, dp, counter, reset_prime, reset_sync);
+a, b, c, d, e, f, g, dp, counter, slow_clk, reset_prime, reset_sync);
 
     input clk, reset;
     output reg an3, an2, an1, an0;
@@ -17,7 +17,7 @@ a, b, c, d, e, f, g, dp, counter, reset_prime, reset_sync);
     parameter AN2_CHAR_SET = 4'b0111;
     parameter AN3_CHAR_SET = 4'b1011;
 
-//     MMCME2_BASE #(
+     MMCME2_BASE #(
 //       .BANDWIDTH("OPTIMIZED"),   // Jitter programming (OPTIMIZED, HIGH, LOW)
       .CLKFBOUT_MULT_F(6.0),     // Multiply value for all CLKOUT (2.000-64.000).
 //       .CLKFBOUT_PHASE(0.0),      // Phase offset in degrees of CLKFB (-360.000-360.000).
@@ -47,14 +47,14 @@ a, b, c, d, e, f, g, dp, counter, reset_prime, reset_sync);
 //       .CLKOUT5_PHASE(0.0),
 //       .CLKOUT6_PHASE(0.0),
 //       .CLKOUT4_CASCADE("FALSE"), // Cascade CLKOUT4 counter with CLKOUT6 (FALSE, TRUE)
-      .DIVCLK_DIVIDE(1),         // Master division value (1-106)
+      .DIVCLK_DIVIDE(1)         // Master division value (1-106)
 //       .REF_JITTER1(0.0),         // Reference input jitter in UI (0.000-0.999).
 //       .STARTUP_WAIT("FALSE")     // Delays DONE until MMCM is locked (FALSE, TRUE)
-//    )
+    )
    
-//    MMCME2_BASE_inst (
+    MMCME2_BASE_inst (
 //       // Clock Outputs: 1-bit (each) output: User configurable clock outputs
-      .CLKOUT0(CLKOUT0),     // 1-bit output: CLKOUT0
+      .CLKOUT0(slow_clk),     // 1-bit output: CLKOUT0
 //       .CLKOUT0B(CLKOUT0B),   // 1-bit output: Inverted CLKOUT0
 //       .CLKOUT1(CLKOUT1),     // 1-bit output: CLKOUT1
 //       .CLKOUT1B(CLKOUT1B),   // 1-bit output: Inverted CLKOUT1
@@ -71,27 +71,27 @@ a, b, c, d, e, f, g, dp, counter, reset_prime, reset_sync);
 //       // Status Ports: 1-bit (each) output: MMCM status ports
 //       .LOCKED(LOCKED),       // 1-bit output: LOCK
 //       // Clock Inputs: 1-bit (each) input: Clock input
-      .CLKIN1(CLKIN1),       // 1-bit input: Clock
+      .CLKIN1(clk)       // 1-bit input: Clock
 //       // Control Ports: 1-bit (each) input: MMCM control ports
 //       .PWRDWN(PWRDWN),       // 1-bit input: Power-down
 //       .RST(RST),             // 1-bit input: Reset
 //       // Feedback Clocks: 1-bit (each) input: Clock feedback ports
 //       .CLKFBIN(CLKFBIN)      // 1-bit input: Feedback clock
-//    );
+    );
 
     LEDdecoder LEDdecoder_inst (.char(char), .LED({a, b, c, d, e, f, g}));
 
-    always @(posedge clk)
+    always @(posedge slow_clk)
     begin
         reset_prime = reset;
     end
 
-    always @(posedge clk)
+    always @(posedge slow_clk)
     begin
         reset_sync = reset_prime;
     end
 
-    always @(posedge clk or posedge reset_sync) begin
+    always @(posedge slow_clk or posedge reset_sync) begin
         if (reset_sync == 1'b1)
             counter = 4'b1111;
         else
