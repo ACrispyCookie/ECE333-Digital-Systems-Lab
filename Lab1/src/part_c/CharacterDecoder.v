@@ -4,7 +4,7 @@ module CharacterDecoder(input [3:0] counter, input [5:0] char0, input [5:0] char
     parameter AN2_CHAR_SET = 4'b1000;
     parameter AN3_CHAR_SET = 4'b1100;
 
-    always @(counter) begin
+    always @(counter or char0 or char1 or char2 or char3) begin
         case (counter)
             AN0_CHAR_SET: char = char0;
             4'b0001: char = char0;
