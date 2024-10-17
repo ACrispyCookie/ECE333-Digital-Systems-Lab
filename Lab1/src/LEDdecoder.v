@@ -5,8 +5,8 @@ module LEDdecoder(char, LED);
 
     always @(char) begin
         case (char)
-            6'd0: LED = 7'b0000001; // char '1' or 'O'
-            6'd1: LED = 7'b1001111; // char '0'
+            6'd0: LED = 7'b0000001; // char '0' or 'O'
+            6'd1: LED = 7'b1001111; // char '1'
             6'd2: LED = 7'b0010010; // char '2' or 'Z'
             6'd3: LED = 7'b0000110; // char '3'
             6'd4: LED = 7'b1001100; // char '4' 

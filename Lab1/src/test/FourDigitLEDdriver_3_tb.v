@@ -1,6 +1,6 @@
 `timescale 1ns / 10ps
 module FourDigitLEDdriver_tb;
-    reg clk, reset;
+    reg clk, reset, button;
     wire [3:0] AN;
     wire CA, CB, CC, CD, CE, CF, CG, dp;
     // wire [6:0] LED = {CA, CB, CC, CD, CE, CF, CG};
@@ -49,7 +49,7 @@ module FourDigitLEDdriver_tb;
     // CE ? "e" : " ", "    ", CC ? "c" : " ", "\n",
     // " ", CD ? "dddd" : "    ", " \n"} : {77{""}};
 
-    FourDigitLEDdriver driver(.clk(clk), .reset(reset), .an3(AN[3]), .an2(AN[2]), .an1(AN[1]), .an0(AN[0]), 
+    FourDigitLEDdriver driver(.clk(clk), .reset(reset), .button(button), .an3(AN[3]), .an2(AN[2]), .an1(AN[1]), .an0(AN[0]), 
     .a(CA), .b(CB), .c(CC), .d(CD), .e(CE), .f(CF), .g(CG), .dp(dp));
 
     initial begin
@@ -59,6 +59,8 @@ module FourDigitLEDdriver_tb;
         clk = 1'b0;
         #10 reset = 1'b1;
         #20000 reset = 1'b0;
+        #4000 button = 1'b1;
+        #4000 button = 1'b0;
         #500000 $finish;
     end
 

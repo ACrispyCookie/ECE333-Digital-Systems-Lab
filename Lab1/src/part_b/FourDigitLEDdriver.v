@@ -1,15 +1,15 @@
 module FourDigitLEDdriver(reset, clk, an3, an2, an1, an0,
-a, b, c, d, e, f, g, dp, counter, slow_clk, reset_sync);
+a, b, c, d, e, f, g, dp);
 
     input clk, reset;
-    output wire an3, an2, an1, an0, a, b, c, d, e, f, g, dp, slow_clk, reset_sync;
-    output wire [3:0] counter;
+    output wire an3, an2, an1, an0, a, b, c, d, e, f, g, dp;
+    wire [3:0] counter;
     wire [5:0] char;
-    wire feedback;
+    wire feedback, reset_sync, slow_clk;
     assign dp = 1'b1;
 
      MMCME2_BASE #(
-      .CLKFBOUT_MULT_F(12.0),
+      .CLKFBOUT_MULT_F(6.0),
       .CLKIN1_PERIOD(10.0),
       .CLKOUT0_DIVIDE_F(120.0),
       .DIVCLK_DIVIDE(1)         // Master division value (1-106)
@@ -22,8 +22,8 @@ a, b, c, d, e, f, g, dp, counter, slow_clk, reset_sync);
       .CLKFBIN(feedback)      // 1-bit input: Feedback clock
     );
 
-    InputSynchronizer synchronizer(.clk(slow_clk), .async_input(reset), .sync_input(reset_sync));
-    Counter counter_inst(.clk(slow_clk), .reset(reset), .counter(counter));
+    InputDebouncer debouncer(.clk(slow_clk), .input_bounce(reset), .debounced(reset_sync));
+    Counter counter_inst(.clk(slow_clk), .reset(reset_sync), .counter(counter));
     AnodeDecoder anode_decoder(.counter(counter), .an0(an0), .an1(an1), .an2(an2), .an3(an3));
     CharacterDecoder char_decoder(.counter(counter), .char(char));
     LEDdecoder LEDdecoder_inst(.char(char), .LED({a, b, c, d, e, f, g}));
