@@ -26,7 +26,7 @@ a, b, c, d, e, f, g, dp);
 
     InputDebouncer debouncer(.clk(slow_clk), .input_bounce(reset), .debounced(reset_sync));
     Counter counter_inst(.clk(slow_clk), .reset(reset_sync), .counter(counter));
-    InputDebouncer debouncer_button(.clk(slow_clk), .input_bounce(button), .debounced_on(button_on));
+    ButtonDebouncer debouncer_button(.clk(slow_clk), .reset(reset_sync), .input_bounce(button), .debounced_on(button_on));
     ButtonCounter button_counter(.clk(slow_clk), .reset(reset_sync), .button(button_on), .button_counter(char_address));
     CharacterMemory memory(.clk(slow_clk), .reset(reset_sync), .address(char_address), .char0(char0), .char1(char1), .char2(char2), .char3(char3));
     AnodeDecoder anode_decoder(.counter(counter), .an0(an0), .an1(an1), .an2(an2), .an3(an3));

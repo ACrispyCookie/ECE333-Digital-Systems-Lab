@@ -60,7 +60,7 @@ module FourDigitLEDdriver_tb;
         #10 reset = 1'b1;
         #20000 reset = 1'b0;
         #4000 button = 1'b1;
-        #4000 button = 1'b0;
+        #20000 button = 1'b0;
         #500000 $finish;
     end
 

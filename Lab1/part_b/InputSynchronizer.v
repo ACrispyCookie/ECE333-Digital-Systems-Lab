@@ -3,12 +3,12 @@ module InputSynchronizer(input clk, input async_input, output reg sync_input);
 
     always @(posedge clk)
     begin
-        input_prime = async_input;
+        input_prime <= async_input;
     end
 
     always @(posedge clk)
     begin
-        sync_input = input_prime;
+        sync_input <= input_prime;
     end
     
 endmodule
