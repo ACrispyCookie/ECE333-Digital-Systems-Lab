@@ -1,5 +1,6 @@
 module CharacterMemory(input clk, input reset, input [4:0] address, output reg [5:0] char0, output reg [5:0] char1, output reg [5:0] char2, output reg [5:0] char3);
     reg [5:0] memory [26:0];
+    wire next_address = address == 6'd26 ? 6'd0 : address + 1;
 
     always @(posedge clk, posedge reset) begin
         if (reset == 1'b1) begin
@@ -36,9 +37,9 @@ module CharacterMemory(input clk, input reset, input [4:0] address, output reg [
             char3 <= memory[3];
         end else begin
             char0 <= memory[address];
-            char1 <= memory[address + 1];
-            char2 <= memory[address + 2];
-            char3 <= memory[address + 3];
+            char1 <= memory[next_address];
+            char2 <= memory[next_address + 1];
+            char3 <= memory[next_address + 2];
         end
     end
 endmodule
