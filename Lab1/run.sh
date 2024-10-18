@@ -11,12 +11,12 @@ ARG=$1
 
 # Run a command based on the argument
 case "$ARG" in
-  "LEDdecoder")
-    iverilog -o ./target/LEDdecoder_tb ./src/LEDdecoder_tb.v ./src/LEDdecoder.v
+  "part_a")
+    iverilog -o ./target/LEDdecoder_tb ./part_a/test/LEDdecoder_tb.v ./part_a/LEDdecoder.v
     vvp ./target/LEDdecoder_tb
     ;;
-  "LEDdriver")
-    iverilog -o ./target/FourDigitLEDdriver_tb ./src/FourDigitLEDdriver_tb.v ./src/FourDigitLEDdriver.v ./src/LEDdecoder.v
+  "part_b")
+    iverilog -o ./target/FourDigitLEDdriver_tb ./part_b/test/FourDigitLEDdriver_tb.v ./part_b/FourDigitLEDdriver.v ./part_a/LEDdecoder.v
     vvp ./target/FourDigitLEDdriver_tb
     ;;
   *)
