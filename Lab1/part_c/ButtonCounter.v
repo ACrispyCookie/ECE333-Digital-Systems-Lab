@@ -2,7 +2,7 @@ module ButtonCounter(input clk, input reset, input button, output reg [4:0] butt
     
    always @(posedge clk or posedge reset) begin
         if (reset == 1'b1)
-            button_counter = 5'b11111;
+            button_counter = 5'b0;
         else if (button_counter == 5'b10110)
             button_counter = 5'b0;
         else if (button == 1'b1)
