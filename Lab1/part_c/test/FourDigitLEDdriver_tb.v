@@ -57,6 +57,7 @@ module FourDigitLEDdriver_tb;
         // $dumpvars(0, FourDigitLEDdriver_tb);
         // $monitor("time = %t, AN = %b, LED = %b\n, display0 = \n%s\n, display1 = \n%s\n, display2 = \n%s\n, display3 = \n%s\n", $time, AN, LED, display0, display1, display2, display3);
         clk = 1'b0;
+        button = 1'b0;
         #10 reset = 1'b1;
         #20000 reset = 1'b0;
         #4000 button = 1'b1;

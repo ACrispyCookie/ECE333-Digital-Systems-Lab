@@ -1,4 +1,4 @@
-module InputDebouncer(input clk, input input_bounce, output reg debounced, output wire debounced_on, output wire debounced_off);
+module ResetDebouncer(input clk, input input_bounce, output reg debounced, output wire debounced_on, output wire debounced_off);
     wire input_1;
     reg input_2;
     reg [3:0] counter;

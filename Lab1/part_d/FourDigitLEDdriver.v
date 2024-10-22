@@ -1,13 +1,13 @@
-module FourDigitLEDdriver(reset, button, clk, an3, an2, an1, an0,
+module FourDigitLEDdriver(reset, clk, an3, an2, an1, an0,
 a, b, c, d, e, f, g, dp);
 
-    input clk, reset, button;
+    input clk, reset;
     output wire an3, an2, an1, an0, a, b, c, d, e, f, g, dp;
     wire [3:0] counter;
     wire [5:0] char0, char1, char2, char3;
     wire [5:0] char;
     wire [4:0] char_address;
-    wire feedback, reset_sync, slow_clk, button_on;
+    wire feedback, reset_sync, slow_clk;
     assign dp = 1'b1;
 
      MMCME2_BASE #(
@@ -24,9 +24,8 @@ a, b, c, d, e, f, g, dp);
       .CLKFBIN(feedback)      // 1-bit input: Feedback clock
     );
 
-    InputDebouncer debouncer(.clk(slow_clk), .input_bounce(reset), .debounced(reset_sync));
+    ResetDebouncer debouncer(.clk(slow_clk), .input_bounce(reset), .debounced(reset_sync));
     Counter counter_inst(.clk(slow_clk), .reset(reset_sync), .counter(counter));
-    InputDebouncer debouncer_button(.clk(slow_clk), .input_bounce(button), .debounced_on(button_on));
     OneSecondCounter second_counter(.clk(slow_clk), .reset(reset_sync), .address(char_address));
     CharacterMemory memory(.clk(slow_clk), .reset(reset_sync), .address(char_address), .char0(char0), .char1(char1), .char2(char2), .char3(char3));
     AnodeDecoder anode_decoder(.counter(counter), .an0(an0), .an1(an1), .an2(an2), .an3(an3));

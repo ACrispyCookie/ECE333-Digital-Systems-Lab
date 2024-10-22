@@ -1,5 +1,5 @@
 module OneSecondCounter(input clk, input reset, output reg [4:0] address);
-    reg [21:0] counter;
+    reg [22:0] counter;
 
     always @(posedge clk or posedge reset) begin
         if (reset == 1'b1) begin
@@ -8,7 +8,7 @@ module OneSecondCounter(input clk, input reset, output reg [4:0] address);
         end
         else begin
             counter <= counter + 22'b1;
-            if (counter == 22'h7fffff) begin
+            if (counter == 5'b11111) begin
                 if (address == 5'b10110)
                     address <= 5'b0;
                 else 
