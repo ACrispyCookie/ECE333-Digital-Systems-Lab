@@ -1,7 +1,7 @@
 module InputDebouncer(input clk, input reset, input input_bounce, output reg debounced, output wire posedge_pulse, output wire negedge_pulse);
     wire input_1;
     reg input_2;
-    reg [3:0] counter;
+    reg [12:0] counter;
     reg last_state;
     wire counter_running = ~(input_1 ^ input_2);
     assign posedge_pulse = counter_running && counter == 4'b1111 && debounced && ~last_state;
@@ -30,12 +30,12 @@ module InputDebouncer(input clk, input reset, input input_bounce, output reg deb
 
     always @(posedge clk or posedge reset) begin
         if (reset == 1'b1) begin
-            counter <= 4'b0;
+            counter <= 13'b0;
         end else begin
             if (counter_running) begin
-                counter <= counter + 4'b1;
+                counter <= counter + 13'b1;
             end else begin
-                counter <= 4'b0;
+                counter <= 13'b0;
             end
         end
     end

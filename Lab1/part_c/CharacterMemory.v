@@ -37,9 +37,9 @@ module CharacterMemory(input clk, input reset, input [4:0] address, output reg [
             char3 <= 6'd10;
         end else begin
             char0 <= memory[address];
-            char1 <= memory[address + 1];
-            char2 <= memory[address + 2];
-            char3 <= memory[address + 3];
+            char1 <= memory[address + 5'd1];
+            char2 <= memory[address + 5'd2];
+            char3 <= memory[address + 5'd3];
         end
     end
 endmodule
