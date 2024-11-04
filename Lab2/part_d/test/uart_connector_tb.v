@@ -6,12 +6,12 @@ module uart_connector_tb;
     reg [2:0] message_counter;
     reg [7:0] tx_data;
     reg tx_en, rx_en, tx_wr;
-    wire tx_busy, rx_valid, rx_ferror, rx_perror, rx_end;
+    wire tx_busy, rx_valid, rx_ferror, rx_perror, rx_end, rx_end_pulse;
     wire [7:0] rx_data;
     wire [3:0] baud_select = 3'b111;
     
     uart_connector uart_connector_inst(.clk(clk), .reset(reset), .baud_select(baud_select), .tx_en(tx_en), .rx_en(rx_en), .tx_wr(tx_wr),
-    .tx_data(tx_data), .tx_busy(tx_busy), .rx_data(rx_data), .rx_valid(rx_valid), .rx_ferror(rx_ferror), .rx_perror(rx_perror), .rx_end(rx_end));
+    .tx_data(tx_data), .tx_busy(tx_busy), .rx_data(rx_data), .rx_valid(rx_valid), .rx_ferror(rx_ferror), .rx_perror(rx_perror), .rx_end(rx_end), .rx_end_pulse(rx_end_pulse));
 
     initial begin
         messages[0] <= 8'haa;
