@@ -1,172 +1,21 @@
-module uart_receiver(clk, reset, rx_data, baud_select, rx_en, rxD, rx_end, rx_end_pulse, rx_ferror, rx_perror, rx_valid);
+module uart_receiver(clk, reset, baud_select, rx_en, rxD, rx_data, rx_ferror, rx_perror, rx_valid);
     input clk, reset, rx_en, rxD;
     input [2:0] baud_select;
-    output reg [7:0] rx_data;
-    output reg rx_valid, rx_ferror, rx_perror, rx_end;
-    output wire rx_end_pulse;
+    output wire [7:0] rx_data;
+    output wire rx_valid, rx_ferror, rx_perror;
 
-    localparam DISABLED = 4'd0;
-    localparam IDLE = 4'd1;
-    localparam START_BIT = 4'd2;
-    localparam BIT_0 = 4'd3;
-    localparam BIT_1 = 4'd4;
-    localparam BIT_2 = 4'd5;
-    localparam BIT_3 = 4'd6;
-    localparam BIT_4 = 4'd7;
-    localparam BIT_5 = 4'd8;
-    localparam BIT_6 = 4'd9;
-    localparam BIT_7 = 4'd10;
-    localparam PARITY_BIT = 4'd11;
-    localparam STOP_BIT = 4'd12;
+    wire rx_busy, rx_busy_data;
+    wire rx_sample, sample_mid, sample_done, previous_bit, current_bit;
+    wire sample_diff = previous_bit != current_bit;
 
-    reg [3:0] current_state, next_state;
-    reg [3:0] sample_counter;
-    reg sampled_bit, previous_bit;
-    wire rx_sample;
-    wire receiving = current_state != DISABLED && current_state != IDLE;
-    wire receiving_data_bits = receiving && current_state != START_BIT && current_state != PARITY_BIT && current_state != STOP_BIT;
-    wire sample_done = receiving && sample_counter == 4'b1111 && rx_sample;
-    assign rx_end_pulse = rx_end && sample_counter == 4'b1111 && rx_sample;
-
-    baud_controller baud_controller_rx(.clk(clk), .reset(reset), .enable(receiving), .baud_select(baud_select), .enable_sample(rx_sample));
-
-    always @(posedge clk, posedge reset) begin
-        if (reset) begin
-            current_state <= DISABLED;
-        end else begin
-            current_state <= next_state;
-        end
-    end
-
-    always @(rx_en or rxD or sample_done or current_state) begin
-        case (current_state)
-            DISABLED: begin
-                rx_valid = ~(rx_ferror && rx_perror);
-                rx_end = 1'b0;
-                next_state = rx_en ? IDLE : DISABLED;
-            end
-            IDLE: begin
-                rx_valid = ~(rx_ferror && rx_perror);
-                rx_end = 1'b0;
-                if (!rx_en) begin
-                    next_state = DISABLED;
-                end else if (!rxD) begin
-                    next_state = START_BIT;
-                end else begin
-                    next_state = IDLE;
-                end
-            end
-            START_BIT: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = sample_done ? BIT_0 : START_BIT;
-            end
-            BIT_0: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = sample_done ? BIT_1 : BIT_0;
-            end
-            BIT_1: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = sample_done ? BIT_2 : BIT_1;
-            end
-            BIT_2: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = sample_done ? BIT_3 : BIT_2;
-            end
-            BIT_3: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = sample_done ? BIT_4 : BIT_3;
-            end
-            BIT_4: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = sample_done ? BIT_5 : BIT_4;
-            end
-            BIT_5: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = sample_done ? BIT_6 : BIT_5;
-            end
-            BIT_6: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = sample_done ? BIT_7 : BIT_6;
-            end
-            BIT_7: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = sample_done ? PARITY_BIT : BIT_7;
-            end
-            PARITY_BIT: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = sample_done ? STOP_BIT : PARITY_BIT;
-            end
-            STOP_BIT: begin
-                rx_valid = ~(rx_ferror && rx_perror);
-                rx_end = 1'b1;
-                next_state = sample_done ? IDLE : STOP_BIT;
-            end
-            default: begin
-                rx_valid = 1'b0;
-                rx_end = 1'b0;
-                next_state = DISABLED;
-            end
-        endcase
-    end
-
-    always @(posedge clk or posedge reset) begin
-        if (reset) begin
-            rx_data <= 8'b00000000;
-        end else if (receiving_data_bits && sample_counter == 4'd8 && rx_sample) begin
-            rx_data <= {rx_data[6:0], rxD};
-        end
-    end
-
-    always @(posedge clk or posedge reset) begin
-        if (reset) begin
-            rx_perror <= 1'b0;
-        end else if (current_state == PARITY_BIT && sample_counter == 4'd8) begin
-            rx_perror <= ^rx_data ^^ rxD;
-        end
-    end
-
-    always @(posedge clk or posedge reset) begin
-        if (reset || current_state == START_BIT) begin
-            rx_ferror <= 1'b0;
-        end else if (receiving && sampled_bit != previous_bit) begin
-            rx_ferror <= 1'b1;
-        end
-    end
-
-    always @(posedge clk or posedge reset) begin
-        if (reset || !receiving) begin
-            sample_counter <= 4'b0;
-        end else if (rx_sample) begin
-            sample_counter <= sample_counter + 4'b1;
-        end
-    end
-
-    always @(posedge clk or posedge reset) begin
-        if (reset || !receiving_data_bits) begin
-            previous_bit <= 1'b0;
-        end else if (receiving_data_bits && sample_counter == 4'b0000 && rx_sample) begin
-            previous_bit <= rxD;
-        end else if (receiving_data_bits && sample_counter[0] == 1'b0 && rx_sample) begin
-            previous_bit <= sampled_bit;
-        end
-    end
-
-    always @(posedge clk or posedge reset) begin
-        if (reset || !receiving_data_bits) begin
-            sampled_bit <= 1'b0;
-        end else if (receiving_data_bits && sample_counter[0] == 1'b0 && rx_sample) begin
-            sampled_bit <= rxD;
-        end
-    end
+    baud_controller baud_controller_inst(.clk(clk), .reset(reset), .enable(rx_busy), .baud_select(baud_select), .enable_sample(rx_sample));
+    
+    receiver_sampler receiver_sampler_inst(.clk(clk), .reset(reset), .enable(rx_busy), .sample_pulse(rx_sample),
+    .data(rxD), .sample_mid(sample_mid), .sample_done(sample_done), .previous_bit(previous_bit), .current_bit(current_bit));
+    
+    receiver_fsm receiver_fsm_inst(.clk(clk), .reset(reset), .rx_en(rx_en), .rxD(rxD), .sample_mid(sample_mid), .sample_done(sample_done), .sample_diff(sample_diff), .rx_data(rx_data),
+    .rx_busy(rx_busy), .rx_busy_data(rx_busy_data), .rx_ferror(rx_ferror), .rx_perror(rx_perror), .rx_valid(rx_valid));
+    
+    receiver_data receiver_data_inst(.clk(clk), .reset(reset), .sample_mid(sample_mid), .rxD(rxD), .rx_busy_data(rx_busy_data), .rx_data(rx_data));
     
 endmodule
