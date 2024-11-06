@@ -1,7 +1,6 @@
-module uart_connector(clk, reset, baud_select, tx_en, tx_wr, rx_en, errorred, an3, an2, an1, an0, a, b, c, d, e, f, g, dp);
-    input clk, reset, tx_en, tx_wr, rx_en;
+module uart_connector(clk, reset, baud_select, tx_wr, tx_en, rx_en, an3, an2, an1, an0, a, b, c, d, e, f, g, dp);
+    input clk, reset, tx_wr, rx_en, tx_en;
     input [2:0] baud_select;
-    output errorred;
     output wire an3, an2, an1, an0, a, b, c, d, e, f, g, dp;
     
     wire [2:0] baud_select_db;

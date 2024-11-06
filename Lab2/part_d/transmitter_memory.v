@@ -8,10 +8,10 @@ module transmitter_memory(clk, reset, address, data);
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin
-            memory[0] <= 8'haa;
-            memory[1] <= 8'h55;
-            memory[2] <= 8'hcc;
-            memory[3] <= 8'h89;
+            memory[0] <= 8'd19;
+            memory[1] <= 8'd5;
+            memory[2] <= 8'd0;
+            memory[3] <= 8'd23;
         end
     end
 

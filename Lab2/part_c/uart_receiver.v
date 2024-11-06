@@ -6,7 +6,8 @@ module uart_receiver(clk, reset, baud_select, rx_en, rxD, rx_data, rx_ferror, rx
 
     wire rx_busy, rx_busy_data;
     wire rx_sample, sample_mid, sample_done, previous_bit, current_bit;
-    wire sample_diff = previous_bit != current_bit;
+    wire sample_diff;
+    assign sample_diff = previous_bit != current_bit;
 
     baud_controller baud_controller_inst(.clk(clk), .reset(reset), .enable(rx_busy), .baud_select(baud_select), .enable_sample(rx_sample));
     

@@ -12,10 +12,10 @@ module receiver_memory(clk, reset, address, write, data_in, data_out_0, data_out
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin
-            memory[0] <= 8'b0;
-            memory[1] <= 8'b0;
-            memory[2] <= 8'b0;
-            memory[3] <= 8'b0;
+            memory[0] <= 8'd10;
+            memory[1] <= 8'd10;
+            memory[2] <= 8'd10;
+            memory[3] <= 8'd10;
         end else if (write) begin
             memory[address] <= data_in;
         end
