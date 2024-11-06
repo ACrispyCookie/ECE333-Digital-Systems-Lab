@@ -2,7 +2,8 @@ module ResetDebouncer(input clk, input input_bounce, output reg debounced, outpu
     wire input_1;
     reg input_2;
     reg [16:0] counter;
-    wire counter_running = ~(input_1 ^ input_2);
+    wire counter_running;
+    assign counter_running = ~(input_1 ^ input_2);
     assign debounced_on = counter_running && counter == 17'h1ffff && debounced;
     assign debounced_off = counter_running && counter == 17'h1ffff && ~debounced;
 

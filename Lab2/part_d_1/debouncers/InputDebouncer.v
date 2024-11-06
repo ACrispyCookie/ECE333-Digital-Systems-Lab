@@ -2,7 +2,8 @@ module InputDebouncer(input clk, input reset, input input_bounce, output reg deb
     wire input_1;
     reg input_2, last_state;
     reg [16:0] counter;
-    wire counter_running = input_1 && input_2;
+    wire counter_running;
+    assign counter_running = input_1 && input_2;
 
     InputSynchronizer sync_inst(.clk(clk), .reset(reset), .async_input(input_bounce), .sync_input(input_1));
 

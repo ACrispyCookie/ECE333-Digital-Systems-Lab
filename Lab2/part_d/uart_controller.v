@@ -4,8 +4,8 @@ module uart_connector(clk, reset, baud_select, tx_en, tx_wr, rx_en, errorred, me
     output wire [7:0] message_0, message_1, message_2, message_3; 
     output errorred;
 
-    wire rx_ferror, rx_perror, rx_valid, tx_busy;
-    wire errorred = rx_ferror || rx_perror;
+    wire rx_ferror, rx_perror, rx_valid, tx_busy, errorred;
+    assign errorred = rx_ferror || rx_perror;
     wire [1:0] tx_address, rx_address;
     wire [7:0] tx_data, rx_data;
 

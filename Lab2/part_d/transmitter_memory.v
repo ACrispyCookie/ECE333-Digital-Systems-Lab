@@ -4,7 +4,8 @@ module transmitter_memory(clk, reset, address, data);
     output data;
 
     reg [7:0] memory [3:0];
-    wire [7:0] data = memory[address];
+    wire [7:0] data;
+    assign data = memory[address];
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin

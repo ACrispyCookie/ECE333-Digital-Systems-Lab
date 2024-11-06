@@ -5,10 +5,10 @@ module uart_connector(clk, reset, baud_select, tx_wr, tx_en, rx_en, an3, an2, an
     
     wire [2:0] baud_select_db;
     wire [7:0] message_0, message_1, message_2, message_3; 
-    wire rx_ferror, rx_perror, rx_valid, tx_busy;
-    wire errorred = rx_ferror || rx_perror;
+    wire rx_ferror, rx_perror, rx_valid, tx_busy, errorred;
     wire [1:0] tx_address, rx_address;
     wire [7:0] tx_data, rx_data;
+    assign errorred = rx_ferror || rx_perror;
 
     ResetDebouncer reset_debouncer(.clk(clk), .input_bounce(reset), .debounced(reset_sync));
     InputDebouncer input_debouncer_baud_2(.clk(clk), .reset(reset_sync), .input_bounce(baud_select[2]), .debounced(baud_select_db[2]));

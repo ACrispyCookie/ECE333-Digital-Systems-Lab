@@ -4,7 +4,8 @@ module uart_connector_tb;
     reg tx_en, rx_en, tx_wr;
     wire [7:0] message_0, message_1, message_2, message_3;
     wire errorred;
-    wire [3:0] baud_select = 3'b111;
+    wire [3:0] baud_select;
+    assign baud_select = 3'b111;
     
     uart_connector uart_connector_inst(.clk(clk), .reset(reset), .baud_select(baud_select), .tx_en(tx_en), .rx_en(rx_en), .tx_wr(tx_wr),
     .errorred(errorred), .message_0(message_0), .message_1(message_1), .message_2(message_2), .message_3(message_3));

@@ -4,10 +4,13 @@ module message_counter(clk, reset, enable, next, current_message, next_pulse);
     output next_pulse;
 
     reg next_1, next_2;
-    wire next_pulse = next_1 && ~next_2;
+    wire next_pulse;
+    assign next_pulse = next_1 && ~next_2;
 
     always @(posedge clk or posedge reset) begin
-        if (reset || !enable) begin
+        if (reset) begin
+            current_message <= 2'b0;
+        end else if (!enable) begin 
             current_message <= 2'b0;
         end else if (next_pulse && current_message != 2'b11) begin
             current_message <= current_message + 2'b1;
@@ -15,7 +18,10 @@ module message_counter(clk, reset, enable, next, current_message, next_pulse);
     end
 
     always @(posedge clk or posedge reset) begin
-        if (reset || !enable) begin
+        if (reset) begin
+            next_1 <= 1'b1;
+            next_2 <= 1'b1;
+        end else if (!enable) begin 
             next_1 <= 1'b1;
             next_2 <= 1'b1;
         end else begin

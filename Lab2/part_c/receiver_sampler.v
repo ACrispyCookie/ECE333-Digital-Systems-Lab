@@ -9,7 +9,9 @@ module receiver_sampler(clk, reset, enable, sample_pulse, data, sample_mid, samp
     sample_counter sample_counter_inst(.clk(clk), .reset(reset), .enable(enable), .sample_pulse(sample_pulse), .sample_counter(sample_counter));
 
     always @(posedge clk or posedge reset) begin
-        if (reset || !enable) begin
+        if (reset) begin
+            previous_bit <= 1'b0;
+        end else if (!enable) begin
             previous_bit <= 1'b0;
         end else if (enable && sample_counter == 4'b0000 && sample_pulse) begin
             previous_bit <= data;
@@ -19,7 +21,9 @@ module receiver_sampler(clk, reset, enable, sample_pulse, data, sample_mid, samp
     end
 
     always @(posedge clk or posedge reset) begin
-        if (reset || !enable) begin
+        if (reset) begin
+            current_bit <= 1'b0;
+        end else if (!enable) begin
             current_bit <= 1'b0;
         end else if (enable && sample_counter[0] == 1'b0 && sample_pulse) begin
             current_bit <= data;
