@@ -1,7 +1,7 @@
 `timescale 1ns/10ps
 module uart_controller_tb;
     reg clk, reset;
-    wire an3, an2, an1, an0, a, b, c, d, e, f, g, dp;
+    wire [7:0] message_0, message_1, message_2, message_3;
     wire [3:0] baud_select;
     wire tx_end, errorred, rx_valid;
     reg [2:0] current_state, next_state;
@@ -14,8 +14,8 @@ module uart_controller_tb;
     parameter WAIT_TO_END = 3'd3;
     parameter END_STATE = 3'd4;
     
-    led_uart_connector led_uart_connector_inst(.clk(clk), .reset(reset), .baud_select(baud_select), .tx_en(tx_en), .rx_en(rx_en), .tx_wr(tx_wr), .tx_end(tx_end), .rx_valid(rx_valid),
-    .errorred(errorred), .an3(an3), .an2(an2), .an1(an1), .an0(an0), .a(a), .b(b), .c(c), .d(d), .e(e), .f(f), .g(g), .dp(dp));
+    uart_controller uart_controller_inst(.clk(clk), .reset(reset), .baud_select(baud_select), .tx_en(tx_en), .rx_en(rx_en), .tx_wr(tx_wr), .tx_end(tx_end), .rx_valid(rx_valid),
+    .errorred(errorred), .message_0(message_0), .message_1(message_1), .message_2(message_2), .message_3(message_3));
 
     always @(posedge clk or posedge reset) begin
         if(reset) begin

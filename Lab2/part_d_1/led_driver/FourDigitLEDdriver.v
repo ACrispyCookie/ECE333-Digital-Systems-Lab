@@ -23,7 +23,8 @@ a, b, c, d, e, f, g, dp);
       .CLKFBIN(feedback)      // 1-bit input: Feedback clock
     );
 
-    Counter counter_inst(.clk(slow_clk), .reset(reset), .counter(counter));
+    ResetDebouncer debouncer(.clk(slow_clk), .input_bounce(reset), .debounced(reset_sync));
+    Counter counter_inst(.clk(slow_clk), .reset(reset_sync), .counter(counter));
     AnodeDecoder anode_decoder(.counter(counter), .an0(an0), .an1(an1), .an2(an2), .an3(an3));
     CharacterDecoder char_decoder(.counter(counter), .char0(char0), .char1(char1), .char2(char2), .char3(char3), .char(char));
     LEDdecoder LEDdecoder_inst(.char(char), .LED({a, b, c, d, e, f, g}));
