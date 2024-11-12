@@ -21,9 +21,9 @@ module uart_transmitter_tb;
         tx_data = data;
         #200 tx_wr = 1'b1;
         #10 tx_wr = 1'b0;
-        #100000 tx_wr = 1'b1;
+        #200000 tx_wr = 1'b1;
         #10 tx_wr = 1'b0;
-        #300000 $finish;
+        #500000 $finish;
     end
 
     always begin
