@@ -35,7 +35,8 @@ module vga_controller (
         .DISPLAY_CYCLES(639),
         .FRONT_PORCH_CYCLES(15),
         .UPSCALE_WIDTH(3),
-        .UPSCALE_CYCLES(4)
+        .UPSCALE_CYCLES(4),
+        .RESET_PIXEL(128)
     )
     hsync_controller_inst(.clk(new_clk), .reset(reset), .enable(enable), .sync(vga_hsync), .rgb_enabled(hrgb_enabled), .pixel(hpixel), .upscale_counter(hpixel_upscale_counter));
 
@@ -47,7 +48,8 @@ module vga_controller (
         .DISPLAY_CYCLES(383999),
         .FRONT_PORCH_CYCLES(7999),
         .UPSCALE_WIDTH(12),
-        .UPSCALE_CYCLES(3999)
+        .UPSCALE_CYCLES(3999),
+        .RESET_PIXEL(96)
     )
     vsync_controller_inst(.clk(new_clk), .reset(reset), .enable(enable), .sync(vga_vsync), .rgb_enabled(vrgb_enabled), .pixel(vpixel));
 

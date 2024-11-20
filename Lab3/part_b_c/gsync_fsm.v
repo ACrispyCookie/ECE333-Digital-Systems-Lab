@@ -11,15 +11,15 @@ module gsync_fsm #(
     sync,
     rgb_enabled
 );
-    localparam IDLE            = 3'b0;
-    localparam PULSE           = 3'b1;
-    localparam PULSE_END       = 3'd2;
-    localparam BACK_PORCH      = 3'd3;
-    localparam BACK_PORCH_END  = 3'd4;
-    localparam DISPLAY         = 3'd5;
-    localparam DISPLAY_END     = 3'd6;
-    localparam FRONT_PORCH     = 3'd7;
-    localparam FRONT_PORCH_END = 3'd8;
+    localparam IDLE            = 4'b0;
+    localparam PULSE           = 4'b1;
+    localparam PULSE_END       = 4'd2;
+    localparam BACK_PORCH      = 4'd3;
+    localparam BACK_PORCH_END  = 4'd4;
+    localparam DISPLAY         = 4'd5;
+    localparam DISPLAY_END     = 4'd6;
+    localparam FRONT_PORCH     = 4'd7;
+    localparam FRONT_PORCH_END = 4'd8;
 
     input clk, reset, enable;
     output reg rgb_enabled, sync;

@@ -5,7 +5,8 @@ module gsync_controller #(
     parameter DISPLAY_CYCLES = 639,
     parameter FRONT_PORCH_CYCLES = 15,
     parameter UPSCALE_WIDTH = 3,
-    parameter UPSCALE_CYCLES = 4
+    parameter UPSCALE_CYCLES = 4,
+    parameter RESET_PIXEL = 128
 ) (
     clk,
     reset,
@@ -42,9 +43,11 @@ module gsync_controller #(
     always @(posedge clk or posedge reset) begin
         if (reset) begin
             pixel <= 7'b0;
+        end else if (pixel == RESET_PIXEL) begin
+            pixel <= 7'b0;
         end else if (rgb_enabled && upscale_counter == UPSCALE_CYCLES) begin
             pixel <= pixel + 7'b1;
-        end 
+        end
     end
     
 endmodule
