@@ -2,11 +2,11 @@ from PIL import Image
 
 def downscale_image(image_path, output_size):
     # Open the image
-    image = Image.open(image_path).convert("RGB")
+    image = Image.open("src/" + image_path).convert("RGB")
     
     # Resize (downscale) the image
     downscaled_image = image.resize(output_size)
-    downscaled_image.save("downscaled_" + image_path);
+    downscaled_image.save("out/downscaled/" + image_path);
     
     return downscaled_image
 
@@ -61,12 +61,65 @@ def save_rgb_values(image, output_prefix="pixel_data", binary_line_length=256):
                 file.write(hex_line + "\n")
 
     # Save each color component to separate text files with formatted mirrored hex lines
-    write_hex_values(red_values, f"{output_prefix}_red.txt")
-    write_hex_values(green_values, f"{output_prefix}_green.txt")
-    write_hex_values(blue_values, f"{output_prefix}_blue.txt")
+    write_hex_values(red_values, f"out/init/{output_prefix}_red.txt")
+    write_hex_values(green_values, f"out/init/{output_prefix}_green.txt")
+    write_hex_values(blue_values, f"out/init/{output_prefix}_blue.txt")
+
+
+def integrate_hex_to_verilog(hex_file, template_file, output_file):
+    # Read the hex data from the generated file
+    with open(hex_file, "r") as hex_f:
+        hex_lines = hex_f.readlines()
+    
+    # Prepare the INIT_* lines
+    init_lines = [
+        f"      .INIT_{i:02X}(256'h{line.strip()}),\n"
+        for i, line in enumerate(hex_lines)
+    ]
+    
+    # Read the VHDL template
+    with open(template_file, "r") as v_f:
+        v_lines = v_f.readlines()
+    
+    # Find where to replace INIT_* blocks in the template
+    start_marker = "      .INIT_00(256'h0000000000000000000000000000000000000000000000000000000000000000),\n"
+    end_marker = "      .INIT_2F(256'h0000000000000000000000000000000000000000000000000000000000000000),\n"
+
+    try:
+        start_index = v_lines.index(start_marker)
+        end_index = v_lines.index(end_marker)
+    except ValueError:
+        print("Markers not found in Verilog template.")
+        return
+    
+    # Replace old INIT_* lines with the new ones
+    new_v_lines = (
+        v_lines[:start_index]
+        + init_lines
+        + v_lines[end_index + 1 :]
+    )
+    
+    # Write the updated VHDL file
+    with open(output_file, "w") as output_f:
+        output_f.writelines(new_v_lines)
 
 # Example usage:
-image_path = "anastasis_vision.png"  # Replace with your image path
+image_path = "given_image.png"  # Replace with your image path
 output_size = (128, 96)       # Replace with desired resolution (width, height)
 downscaled_image = downscale_image(image_path, output_size)
 save_rgb_values(downscaled_image)
+integrate_hex_to_verilog(
+    hex_file="out/init/pixel_data_red.txt",  # Your blue component hex file
+    template_file="src/verilog/vram_red.v",  # Template VHDL file
+    output_file="out/files/vram_red.v"  # Updated VHDL output file
+)
+integrate_hex_to_verilog(
+    hex_file="out/init/pixel_data_green.txt",  # Your blue component hex file
+    template_file="src/verilog/vram_green.v",  # Template VHDL file
+    output_file="out/files/vram_green.v"  # Updated VHDL output file
+)
+integrate_hex_to_verilog(
+    hex_file="out/init/pixel_data_blue.txt",  # Your blue component hex file
+    template_file="src/verilog/vram_blue.v",  # Template VHDL file
+    output_file="out/files/vram_blue.v"  # Updated VHDL output file
+)

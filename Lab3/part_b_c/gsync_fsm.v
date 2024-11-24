@@ -31,7 +31,7 @@ module gsync_fsm #(
     always @(posedge clk or posedge reset) begin
         if (reset) begin
             counter <= 0;
-        end else if (state_end) begin
+        end else if (!enable || state_end) begin
             counter <= 0;
         end else begin
             counter <= counter + 1;

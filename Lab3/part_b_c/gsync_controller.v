@@ -30,20 +30,20 @@ module gsync_controller #(
     ) 
     gsync_fsm_inst(.clk(clk), .reset(reset), .enable(enable), .sync(sync), .rgb_enabled(rgb_enabled));
 
-    always @(posedge clk or posedge reset) begin
+    always @(posedge clk) begin
         if (reset) begin
             upscale_counter <= 0;
-        end else if (!rgb_enabled || upscale_counter == UPSCALE_CYCLES) begin
+        end else if (!enable || !rgb_enabled || upscale_counter == UPSCALE_CYCLES) begin
             upscale_counter <= 0;
         end else begin
             upscale_counter <= upscale_counter + 1;
         end
     end
 
-    always @(posedge clk or posedge reset) begin
+    always @(posedge clk) begin
         if (reset) begin
             pixel <= 7'b0;
-        end else if (pixel == RESET_PIXEL) begin
+        end else if (!enable || pixel == RESET_PIXEL) begin
             pixel <= 7'b0;
         end else if (rgb_enabled && upscale_counter == UPSCALE_CYCLES) begin
             pixel <= pixel + 7'b1;

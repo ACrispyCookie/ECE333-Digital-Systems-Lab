@@ -19,12 +19,14 @@ module vga_controller (
     wire hrgb_enabled, vrgb_enabled;
 
     clock_divider clock_divider_inst(.clk(clk), .new_clk(new_clk));
+    ResetDebouncer reset_debouncer_inst(.clk(new_clk), .input_bounce(reset), .debounced(debounced_reset), .debounced_off(), .debounced_on());
+    InputDebouncer enable_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(enable), .debounced(debounced_enable), .posedge_pulse());
     
     pixel_controller #(
         .UPSCALE_WIDTH(3),
         .UPSCALE_CYCLES(4)
     )
-    pixel_controller_inst(.clk(new_clk), .reset(reset), .hrgb_enabled(hrgb_enabled), .vrgb_enabled(vrgb_enabled), 
+    pixel_controller_inst(.clk(new_clk), .reset(debounced_reset), .hrgb_enabled(hrgb_enabled), .vrgb_enabled(vrgb_enabled), 
     .hpixel(hpixel), .hpixel_upscale_counter(hpixel_upscale_counter), .vpixel(vpixel), .r(vga_red), .g(vga_green), .b(vga_blue));
 
     // Horizontal sync controller
@@ -38,7 +40,7 @@ module vga_controller (
         .UPSCALE_CYCLES(4),
         .RESET_PIXEL(128)
     )
-    hsync_controller_inst(.clk(new_clk), .reset(reset), .enable(enable), .sync(vga_hsync), .rgb_enabled(hrgb_enabled), .pixel(hpixel), .upscale_counter(hpixel_upscale_counter));
+    hsync_controller_inst(.clk(new_clk), .reset(debounced_reset), .enable(debounced_enable), .sync(vga_hsync), .rgb_enabled(hrgb_enabled), .pixel(hpixel), .upscale_counter(hpixel_upscale_counter));
 
     // Vertical sync controller
     gsync_controller #(
@@ -51,6 +53,6 @@ module vga_controller (
         .UPSCALE_CYCLES(3999),
         .RESET_PIXEL(96)
     )
-    vsync_controller_inst(.clk(new_clk), .reset(reset), .enable(enable), .sync(vga_vsync), .rgb_enabled(vrgb_enabled), .pixel(vpixel));
+    vsync_controller_inst(.clk(new_clk), .reset(debounced_reset), .enable(debounced_enable), .sync(vga_vsync), .rgb_enabled(vrgb_enabled), .pixel(vpixel), .upscale_counter());
 
 endmodule
