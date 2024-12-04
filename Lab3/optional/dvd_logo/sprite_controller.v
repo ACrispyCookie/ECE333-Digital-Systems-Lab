@@ -55,7 +55,8 @@ module sprite_controller #(
         if (reset) begin
             color <= 3'b001;
         end else if (frame_counter == FRAME_INTERVAL && frame_end
-        && (x_pos + x_velocity + WIDTH >= X_BOUNDARY || y_pos + y_velocity + HEIGHT >= Y_BOUNDARY)) begin // If any collision is about to happen
+        && ((x_pos + x_velocity + (WIDTH - 1) - 1 == X_BOUNDARY || x_pos + x_velocity + 1 == 0) 
+        || (y_pos + y_velocity + (HEIGHT - 1) - 1 == Y_BOUNDARY || y_pos + y_velocity + 1 == 0))) begin // If any collision is about to happen
             if (color == 3'b111) begin // Don't use black color
                 color <= 3'b001;
             end else begin
@@ -68,7 +69,8 @@ module sprite_controller #(
         if (reset) begin
             x_velocity <= 6'd1;
             x_step <= 6'd1;
-        end else if (frame_counter == FRAME_INTERVAL && frame_end && x_pos + x_velocity + WIDTH >= X_BOUNDARY) begin // Horizontal collision
+        end else if (frame_counter == FRAME_INTERVAL && frame_end && 
+        (x_pos + x_velocity + (WIDTH - 1) - 1 == X_BOUNDARY || x_pos + x_velocity + 1 == 0)) begin // Horizontal collision
             x_velocity <= -x_velocity;
             x_step <= -x_step;
         end
@@ -78,7 +80,8 @@ module sprite_controller #(
         if (reset) begin
             y_velocity <= 6'd1;
             y_step <= X_BOUNDARY + 1;
-        end else if (frame_counter == FRAME_INTERVAL && frame_end && y_pos + y_velocity + HEIGHT >= Y_BOUNDARY) begin // Vertical collision
+        end else if (frame_counter == FRAME_INTERVAL && frame_end && 
+        (y_pos + y_velocity + (HEIGHT - 1) - 1 == Y_BOUNDARY || y_pos + y_velocity + 1 == 0)) begin // Vertical collision
             y_velocity <= -y_velocity;
             y_step <= -y_step;
         end
@@ -97,19 +100,19 @@ module sprite_controller #(
                 x_pos <= x_pos + x_velocity;
                 y_pos <= y_pos + y_velocity;
             end else begin // If in edit mode control with buttons
-                if (up_ctrl && y_pos - 1 > 0) begin 
-                    start_pos <= start_pos - Y_BOUNDARY + 1;
-                    end_pos <= end_pos - Y_BOUNDARY + 1;
+                if (up_ctrl && y_pos > 0) begin 
+                    start_pos <= start_pos - X_BOUNDARY + 1;
+                    end_pos <= end_pos - X_BOUNDARY + 1;
                     y_pos <= y_pos - 6'd1;
-                end else if (down_ctrl && y_pos + 1 > Y_BOUNDARY) begin
-                    start_pos <= start_pos + Y_BOUNDARY + 1;
-                    end_pos <= end_pos + Y_BOUNDARY + 1;
+                end else if (down_ctrl && y_pos + HEIGHT - 1 < Y_BOUNDARY) begin
+                    start_pos <= start_pos + X_BOUNDARY + 1;
+                    end_pos <= end_pos + X_BOUNDARY + 1;
                     y_pos <= y_pos + 6'd1;
-                end else if (left_ctrl && x_pos - 1 > 0) begin
+                end else if (left_ctrl && x_pos > 0) begin
                     start_pos <= start_pos - 14'd1;
                     end_pos <= end_pos - 14'd1;
                     x_pos <= x_pos - 6'd1;
-                end else if (right_ctrl && x_pos + 1 < X_BOUNDARY) begin
+                end else if (right_ctrl && x_pos + WIDTH - 1 < X_BOUNDARY) begin
                     start_pos <= start_pos + 14'd1;
                     end_pos <= end_pos + 14'd1;
                     x_pos <= x_pos + 6'd1;

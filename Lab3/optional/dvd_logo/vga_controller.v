@@ -1,12 +1,12 @@
 module vga_controller (
-    debounced_reset,
+    reset,
     clk,
-    debounced_enable,
-    debounced_edit, 
-    up_debounced,
-    down_debounced,
-    left_debounced,
-    right_debounced,
+    enable,
+    edit_mode, 
+    up_ctrl,
+    down_ctrl,
+    left_ctrl,
+    right_ctrl,
     vga_red,
     vga_green,
     vga_blue,
@@ -14,8 +14,8 @@ module vga_controller (
     vga_vsync
 );
 
-    input debounced_reset, clk, debounced_enable, debounced_edit;
-    input up_debounced, down_debounced, left_debounced, right_debounced;
+    input reset, clk, enable, edit_mode;
+    input up_ctrl, down_ctrl, left_ctrl, right_ctrl;
 
     output vga_red, vga_green, vga_blue;
     output vga_hsync, vga_vsync;
@@ -28,13 +28,13 @@ module vga_controller (
     wire [2:0] write_data;
 
     clock_divider clock_divider_inst(.clk(clk), .new_clk(new_clk));
-    // ResetDebouncer reset_debouncer_inst(.clk(new_clk), .input_bounce(reset), .debounced(debounced_reset), .debounced_off(), .debounced_on());
-    // InputDebouncer enable_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(enable), .debounced(debounced_enable), .posedge_pulse());
-    // InputDebouncer edit_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(edit_mode), .debounced(debounced_edit), .posedge_pulse());
-    // InputDebouncer up_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(up_ctrl), .debounced(up_debounced), .posedge_pulse());
-    // InputDebouncer down_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(down_ctrl), .debounced(down_debounced), .posedge_pulse());
-    // InputDebouncer left_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(left_ctrl), .debounced(left_debounced), .posedge_pulse());
-    // InputDebouncer right_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(right_ctrl), .debounced(right_debounced), .posedge_pulse());
+    ResetDebouncer reset_debouncer_inst(.clk(new_clk), .input_bounce(reset), .debounced(debounced_reset), .debounced_off(), .debounced_on());
+    InputDebouncer enable_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(enable), .debounced(debounced_enable), .posedge_pulse());
+    InputDebouncer edit_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(edit_mode), .debounced(debounced_edit), .posedge_pulse());
+    InputDebouncer up_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(up_ctrl), .debounced(up_debounced), .posedge_pulse());
+    InputDebouncer down_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(down_ctrl), .debounced(down_debounced), .posedge_pulse());
+    InputDebouncer left_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(left_ctrl), .debounced(left_debounced), .posedge_pulse());
+    InputDebouncer right_debouncer_inst(.clk(new_clk), .reset(debounced_reset), .input_bounce(right_ctrl), .debounced(right_debounced), .posedge_pulse());
     
     renderer renderer_inst(.clk(new_clk), .reset(debounced_reset), .edit_mode(debounced_edit),  .up_ctrl(up_debounced), .down_ctrl(down_debounced), 
     .left_ctrl(left_debounced), .right_ctrl(right_debounced), .frame_end(frame_end), .write_enable(write_enable), .write_address(write_address), 
