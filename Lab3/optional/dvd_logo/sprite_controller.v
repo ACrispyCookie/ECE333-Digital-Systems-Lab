@@ -22,6 +22,7 @@ module sprite_controller #(
     localparam HEIGHT = 6'd22;
     localparam START_POS = (X_BOUNDARY + 1) * Y_POS + X_POS;
     localparam END_POS = START_POS + 2_739;
+    localparam FRAME_INTERVAL = 2'b10;
 
     input clk, reset, edit_mode;
     input up_ctrl, down_ctrl, left_ctrl, right_ctrl;
@@ -42,7 +43,7 @@ module sprite_controller #(
         if (reset) begin
             frame_counter <= 2'b0;
         end else if (frame_end) begin
-            if (frame_counter == 2'b10) begin
+            if (frame_counter == FRAME_INTERVAL) begin
                 frame_counter <= 2'b0;
             end else begin
                 frame_counter <= frame_counter + 2'b1;
@@ -53,7 +54,7 @@ module sprite_controller #(
     always @(posedge clk) begin
         if (reset) begin
             color <= 3'b001;
-        end else if (frame_counter == 2'b10
+        end else if (frame_counter == FRAME_INTERVAL && frame_end
         && (x_pos + x_velocity + WIDTH >= X_BOUNDARY || y_pos + y_velocity + HEIGHT >= Y_BOUNDARY)) begin // If any collision is about to happen
             if (color == 3'b111) begin // Don't use black color
                 color <= 3'b001;
@@ -67,7 +68,7 @@ module sprite_controller #(
         if (reset) begin
             x_velocity <= 6'd1;
             x_step <= 6'd1;
-        end else if (frame_counter == 2'b10 && x_pos + x_velocity + WIDTH >= X_BOUNDARY) begin // Horizontal collision
+        end else if (frame_counter == FRAME_INTERVAL && frame_end && x_pos + x_velocity + WIDTH >= X_BOUNDARY) begin // Horizontal collision
             x_velocity <= -x_velocity;
             x_step <= -x_step;
         end
@@ -77,7 +78,7 @@ module sprite_controller #(
         if (reset) begin
             y_velocity <= 6'd1;
             y_step <= X_BOUNDARY + 1;
-        end else if (frame_counter == 2'b10 && y_pos + y_velocity + HEIGHT >= Y_BOUNDARY) begin // Vertical collision
+        end else if (frame_counter == FRAME_INTERVAL && frame_end && y_pos + y_velocity + HEIGHT >= Y_BOUNDARY) begin // Vertical collision
             y_velocity <= -y_velocity;
             y_step <= -y_step;
         end
@@ -89,7 +90,7 @@ module sprite_controller #(
             end_pos <= END_POS;
             x_pos <= X_POS;
             y_pos <= Y_POS;
-        end else if (frame_counter == 2'b10) begin
+        end else if (frame_counter == FRAME_INTERVAL && frame_end) begin
             if (!edit_mode) begin // If not editing move automatically
                 start_pos <= start_pos + x_step + y_step;
                 end_pos <= end_pos + x_step + y_step;

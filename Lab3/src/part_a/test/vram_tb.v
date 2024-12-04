@@ -3,7 +3,7 @@ module vram_tb;
     reg [13:0] address;
     wire [15:0] red, green, blue;
 
-    vram vram_inst(.clk(clk), .reset(reset), .enable(1'b1), .address(address), .r(red), .g(green), .b(blue));
+    vram vram_inst(.clk(clk), .reset(reset), .read_address(address), .r(red), .g(green), .b(blue));
 
     initial begin
         clk = 1'b0;
@@ -11,15 +11,7 @@ module vram_tb;
         reset = 1'b0;
         #300 reset = 1'b1;
         #300 reset = 1'b0;
-        // address = 14'd1;
-        // #200
-        // address = 14'd2;
-        // #200
-        // address = 14'd3;
-        // #200
-        // address = 14'd4;
-        // #200
-        // address = 14'd5;
+        #200 address = 14'd16;
         #10000 $finish;
     end
 
