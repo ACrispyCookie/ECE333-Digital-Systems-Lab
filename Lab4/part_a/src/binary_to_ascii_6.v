@@ -1,4 +1,4 @@
-module values_to_ascii_6 (
+module binary_to_ascii_6 (
     binary,
     ascii_1,
     ascii_2,
