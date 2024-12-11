@@ -10,15 +10,16 @@ module binary_to_ascii_4 (
     ready
 );
 
+    localparam BINARY_WIDTH = 14;
     localparam ZERO_ASCII = 7'd48;
     // FSM states
     localparam IDLE = 2'd0;
-    localparam ADD = 2'd1;
-    localparam SHIFT = 2'd2;
+    localparam SHIFT = 2'd1;
+    localparam ADD = 2'd2;
     localparam READY = 2'd3;
 
     input clk, reset;
-    input [13:0] binary;
+    input [BINARY_WIDTH-1:0] binary;
     input start;
     output wire [7:0] ascii_1, ascii_2, ascii_3, ascii_4;
     output reg ready;
@@ -26,7 +27,7 @@ module binary_to_ascii_4 (
     reg [3:0] bcd_1, bcd_2, bcd_3, bcd_4;
     reg [1:0] current_state, next_state;
     reg [3:0] shift_counter;
-    reg [13:0] binary_reg;
+    reg [BINARY_WIDTH-1:0] binary_reg;
     reg shift_enabled, adding_enabled, copy_binary;
 
     always @(posedge clk or posedge reset) begin
@@ -35,7 +36,7 @@ module binary_to_ascii_4 (
         end else if (copy_binary) begin
             binary_reg <= binary;
         end else if (shift_enabled) begin
-            binary_reg <= {binary_reg[12:0], 0};
+            binary_reg <= binary_reg << 1;
         end
     end
 
@@ -51,7 +52,7 @@ module binary_to_ascii_4 (
             bcd_3 <= bcd_3 >= 5 ? bcd_3 + 4'd3 : bcd_3;
             bcd_4 <= bcd_4 >= 5 ? bcd_4 + 4'd3 : bcd_4;
         end else if (shift_enabled) begin
-            {bcd_1, bcd_2, bcd_3, bcd_4} <= {bcd_1, bcd_2, bcd_3, bcd_4} << 1 | binary[13];
+            {bcd_1, bcd_2, bcd_3, bcd_4} <= {bcd_1, bcd_2, bcd_3, bcd_4} << 1 | binary_reg[BINARY_WIDTH-1];
         end
     end
 
@@ -60,7 +61,7 @@ module binary_to_ascii_4 (
             shift_counter <= 4'd0;
         end else if (shift_enabled) begin
             shift_counter <= shift_counter + 4'b1;
-        end else begin
+        end else if (!adding_enabled) begin
             shift_counter <= 4'd0;
         end
     end
@@ -76,7 +77,7 @@ module binary_to_ascii_4 (
         case (current_state)
             IDLE: next_state = start ? SHIFT : IDLE;
             SHIFT: next_state = ADD;
-            ADD: next_state = shift_counter == 4'd12 ? READY : SHIFT;
+            ADD: next_state = shift_counter == BINARY_WIDTH ? READY : SHIFT;
             READY: next_state = start ? SHIFT : READY; 
             default: next_state = IDLE;
         endcase
