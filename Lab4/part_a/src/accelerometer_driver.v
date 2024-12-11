@@ -34,15 +34,16 @@ uart_transmitter_data_control uart_transmitter_data_control_inst(.clk(clk), .res
 );
 
 binary_to_ascii_4 binary_to_ascii_X(.clk(clk), .reset(reset), .binary(X_val), .start(start_X),
-.ascii_1(ascii_X1), .ascii_2(ascii_X2), .ascii_3(ascii_X3), .ascii_4(ascii_X4), .ready(ready_X));
+.ascii_1(ascii_X1), .ascii_2(ascii_X2), .ascii_3(ascii_X3), .ascii_4(ascii_X4), .is_negative(is_negative_X), .ready(ready_X));
 
 binary_to_ascii_4 binary_to_ascii_Y(.clk(clk), .reset(reset), .binary(Y_val), .start(start_Y),
-.ascii_1(ascii_Y1), .ascii_2(ascii_Y2), .ascii_3(ascii_Y3), .ascii_4(ascii_Y4), .ready(ready_Y));
+.ascii_1(ascii_Y1), .ascii_2(ascii_Y2), .ascii_3(ascii_Y3), .ascii_4(ascii_Y4), .is_negative(is_negative_Y), .ready(ready_Y));
 
 binary_to_ascii_4 binary_to_ascii_Z(.clk(clk), .reset(reset), .binary(Z_val), .start(start_Z),
-.ascii_1(ascii_Z1), .ascii_2(ascii_Z2), .ascii_3(ascii_Z3), .ascii_4(ascii_Z4), .ready(ready_Z));
+.ascii_1(ascii_Z1), .ascii_2(ascii_Z2), .ascii_3(ascii_Z3), .ascii_4(ascii_Z4), .is_negative(is_negative_Z), .ready(ready_Z));
 
 binary_to_ascii_6 binary_to_ascii_T(.clk(clk), .reset(reset), .binary(T_val), .start(start_T),
-.ascii_1(ascii_T1), .ascii_2(ascii_T2), .ascii_3(ascii_T3), .ascii_4(ascii_T4), .ascii_5(ascii_T5), .ascii_6(ascii_T6), .ready(ready_T));
+.ascii_1(ascii_T1), .ascii_2(ascii_T2), .ascii_3(ascii_T3), .ascii_4(ascii_T4), .ascii_5(ascii_T5), .ascii_6(ascii_T6), 
+.is_negative(is_negative_T), .ready(ready_T));
 
 endmodule
