@@ -11,7 +11,7 @@ module binary_to_ascii_4 (
     ready
 );
 
-    localparam BINARY_WIDTH = 14;
+    localparam BINARY_WIDTH = 12;
     localparam ZERO_ASCII = 8'd48;
     // FSM states
     localparam IDLE = 2'd0;
