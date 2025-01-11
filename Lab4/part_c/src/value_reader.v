@@ -26,7 +26,7 @@ module value_reader (
 
     /* Wait counter values */
     localparam RESET_WAIT_TIME = 19'd50000;
-    localparam READ_WAIT_TIME = 1000;
+    localparam READ_WAIT_TIME = 19'd500000;
 
     /* FSM states */
     localparam RESET = 3'd0;
