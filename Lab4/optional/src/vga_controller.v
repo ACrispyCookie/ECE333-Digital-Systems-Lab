@@ -31,7 +31,7 @@ module vga_controller (
     wire [13:0] write_address;
     wire [2:0] write_data;
 
-    clock_divider clock_divider_inst(.clk(clk), .new_clk(new_clk));
+    clock_divider_simple clock_divider_inst(.clk(clk), .new_clk(new_clk));
     InputDebouncer enable_debouncer_inst(.clk(new_clk), .reset(reset), .input_bounce(enable), .debounced(debounced_enable), .posedge_pulse());
     InputDebouncer edit_debouncer_inst(.clk(new_clk), .reset(reset), .input_bounce(edit_mode), .debounced(debounced_edit), .posedge_pulse());
     InputDebouncer accel_debouncer_inst(.clk(new_clk), .reset(reset), .input_bounce(accel_mode), .debounced(debounced_accel), .posedge_pulse());

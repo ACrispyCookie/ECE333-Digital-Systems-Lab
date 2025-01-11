@@ -39,12 +39,12 @@ module sprite_controller #(
     reg [6:0] x_velocity, y_velocity;
     reg [13:0] x_step, y_step;
     reg [2:0] color;
-    wire [6:0] x_accel_scaled, y_accel_scaled;
+    wire signed [6:0] x_accel_scaled, y_accel_scaled;
     assign r = color[0];
     assign g = color[1];
     assign b = color[2];
-    assign x_accel_scaled = {{3{x_accel[11]}}, x_accel[11:8]}
-    assign y_accel_scaled = {{3{y_accel[11]}}, y_accel[11:8]}
+    assign x_accel_scaled = {{3{x_accel[11]}}, x_accel[11:8]};
+    assign y_accel_scaled = {{3{y_accel[11]}}, y_accel[11:8]};
     
     always @(posedge clk) begin
         if (reset) begin
