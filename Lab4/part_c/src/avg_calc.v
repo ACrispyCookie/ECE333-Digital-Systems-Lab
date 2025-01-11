@@ -14,21 +14,21 @@ module avg_calc (
 );
 
     input clk, reset, copy_values;
-    input signed [10:0] x_binary, y_binary, z_binary;
+    input signed [11:0] x_binary, y_binary, z_binary;
     input signed [18:0] t_binary;
-    output signed reg [10:0] x_avg, y_avg, z_avg;
-    output signed reg [18:0] t_avg;
+    output reg signed [11:0] x_avg, y_avg, z_avg;
+    output reg signed [18:0] t_avg;
     output reg ready;
 
-    reg [16:0] partial_sum_x, partial_sum_y, partial_sum_z;
+    reg [17:0] partial_sum_x, partial_sum_y, partial_sum_z;
     reg [24:0] partial_sum_t;
     reg [5:0] partial_sum_count;
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin
-            partial_sum_x <= 17'd0;
-            partial_sum_y <= 17'd0;
-            partial_sum_z <= 17'd0;
+            partial_sum_x <= 18'd0;
+            partial_sum_y <= 18'd0;
+            partial_sum_z <= 18'd0;
             partial_sum_t <= 25'd0;
         end else if (copy_values) begin
             if (partial_sum_count == 6'd0) begin
@@ -65,9 +65,9 @@ module avg_calc (
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin
-            x_avg <= 11'd0;
-            y_avg <= 11'd0;
-            z_avg <= 11'd0;
+            x_avg <= 12'd0;
+            y_avg <= 12'd0;
+            z_avg <= 12'd0;
             t_avg <= 19'd0;
         end else if (copy_values && partial_sum_count == 6'd63) begin
             x_avg <= partial_sum_x >> 6;

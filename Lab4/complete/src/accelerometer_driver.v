@@ -24,13 +24,10 @@ wire spi_enable, command_done;
 wire [7:0] spi_transmit_data;
 
 /* SPI master outputs */
-wire spi_ready, spi_ss;
+wire spi_ready;
 wire [7:0] received_data;
 
-wire data_ready_for_printing;
-assign data_ready_for_printing = ready_X && ready_Y && ready_Z && ready_T;
-
-uart_transmitter_data_control uart_transmitter_data_control_inst(.clk(clk), .reset(reset), .TxD(TxD), .start_transmission(1'b1), .data_ready_for_printing(data_ready_for_printing),
+uart_transmitter_data_control uart_transmitter_data_control_inst(.clk(clk), .reset(reset), .TxD(TxD), .start_transmission(1'b1), .data_ready_for_printing(ready_T),
 .ascii_X1(ascii_X1), .ascii_X2(ascii_X2), .ascii_X3(ascii_X3), .ascii_X4(ascii_X4),
 .ascii_Y1(ascii_Y1), .ascii_Y2(ascii_Y2), .ascii_Y3(ascii_Y3), .ascii_Y4(ascii_Y4),
 .ascii_Z1(ascii_Z1), .ascii_Z2(ascii_Z2), .ascii_Z3(ascii_Z3), .ascii_Z4(ascii_Z4),
@@ -54,10 +51,10 @@ binary_to_ascii_6 binary_to_ascii_T(.clk(clk), .reset(reset), .binary(T_val), .s
 value_reader value_reader_inst(.clk(clk), .reset(reset), .x_avg(X_val), .y_avg(Y_val), .z_avg(Z_val), .t_avg(T_val),
 .values_ready(values_ready), .send(send), .command_done(command_done), .command(command), .address(address), .data(data), .received_data(received_data));
 
-command_sender command_sender_inst(.clk(clk), .reset(reset), .spi_enable(spi_enable), .spi_ready(spi_ready), .spi_ss(spi_ss), .spi_transmit_data(spi_transmit_data), 
+command_sender command_sender_inst(.clk(clk), .reset(reset), .spi_enable(spi_enable), .spi_ready(spi_ready), .spi_ss(ss), .spi_transmit_data(spi_transmit_data), 
 .send(send), .command_done(command_done), .command(command), .address(address), .data(data));
 
-spi_master spi_master_inst(.clk(clk), .reset(reset), .miso(miso), .sclk(sclk), .mosi(mosi), .ss(spi_ss),
+spi_master spi_master_inst(.clk(clk), .reset(reset), .miso(miso), .sclk(sclk), .mosi(mosi), .ss(ss),
 .enable(spi_enable), .data_ready(spi_ready), .data_to_transmit(spi_transmit_data), .received_data(received_data));
 
 endmodule

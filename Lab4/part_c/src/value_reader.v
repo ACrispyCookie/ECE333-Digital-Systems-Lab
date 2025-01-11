@@ -26,14 +26,17 @@ module value_reader (
 
     /* Wait counter values */
     localparam RESET_WAIT_TIME = 19'd50000;
-    localparam READ_WAIT_TIME = 500000;
+    localparam READ_WAIT_TIME = 1000;
 
     /* FSM states */
-    localparam RESET = 4'd0;
-    localparam WAIT_RESET = 4'd1;
-    localparam FILTER_CONTROL = 4'd2;
-    localparam POWER_CONTROL = 4'd3;
-    localparam INIT_DONE = 4'd4;
+    localparam RESET = 3'd0;
+    localparam WAIT_RESET = 3'd1;
+    localparam FILTER_CONTROL = 3'd2;
+    localparam POWER_CONTROL = 3'd3;
+    localparam INIT_DONE = 3'd4;
+    localparam READ = 3'd5;
+    localparam COPY_TO_AVG = 3'd6;
+    localparam READ_DONE = 3'd7;
 
     /* FSM signals */
     reg [3:0] current_state, next_state;
@@ -53,7 +56,7 @@ module value_reader (
     reg signed [11:0] x_raw, y_raw, z_raw, t_raw;
 
     /* Binary values */
-    wire signed [10:0] x_binary, y_binary, z_binary;
+    wire signed [11:0] x_binary, y_binary, z_binary;
     wire signed [18:0] t_binary;
 
     assign x_binary = {x_raw[11], x_raw[11:1]};
@@ -62,7 +65,7 @@ module value_reader (
     assign t_binary = (t_raw << 6) + t_raw;
 
     /* Avg values */
-    output wire signed [10:0] x_avg, y_avg, z_avg;
+    output wire signed [11:0] x_avg, y_avg, z_avg;
     output wire signed [18:0] t_avg;
 
     avg_calc avg_calc_inst(.clk(clk), .reset(reset), .x_binary(x_binary), .y_binary(y_binary), 
@@ -128,7 +131,7 @@ module value_reader (
             read_counter <= 3'b0;
         end else if (run_read_counter && command_done) begin
             read_counter <= read_counter + 3'b1;
-        end else begin
+        end else if (~run_read_counter) begin
             read_counter <= 3'b0;
         end
     end
@@ -148,7 +151,8 @@ module value_reader (
             FILTER_CONTROL: next_state = command_done ? POWER_CONTROL : FILTER_CONTROL;
             POWER_CONTROL: next_state = command_done ? INIT_DONE : POWER_CONTROL;
             INIT_DONE: next_state = READ;
-            READ: next_state = command_done && read_counter == ? READ_DONE : READ;
+            READ: next_state = (command_done && read_counter == T_HIGH) ? COPY_TO_AVG : READ;
+            COPY_TO_AVG: next_state = READ_DONE;
             READ_DONE: next_state = wait_counter == READ_WAIT_TIME ? READ : READ_DONE;
             default: next_state = RESET;
         endcase
@@ -210,7 +214,7 @@ module value_reader (
                 data = 8'h0;
                 add_to_avg = 1'b0;
             end
-            READ_DONE:  begin
+            COPY_TO_AVG:  begin
                 send = 1'b0;
                 run_wait_counter = 1'b1;
                 run_read_counter = 1'b0;
@@ -218,6 +222,15 @@ module value_reader (
                 address = 8'h0;
                 data = 8'h0;
                 add_to_avg = 1'b1;
+            end
+            READ_DONE:  begin
+                send = 1'b0;
+                run_wait_counter = 1'b1;
+                run_read_counter = 1'b0;
+                command = 8'h0;
+                address = 8'h0;
+                data = 8'h0;
+                add_to_avg = 1'b0;
             end
             default: begin
                 send = 1'b0;
