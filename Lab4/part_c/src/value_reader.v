@@ -144,7 +144,7 @@ module value_reader (
         end
     end
 
-    always @(current_state or command_done or wait_counter) begin
+    always @(current_state or command_done or wait_counter or read_counter) begin
         case (current_state)
             RESET: next_state = command_done ? WAIT_RESET : RESET;
             WAIT_RESET: next_state = wait_counter == RESET_WAIT_TIME ? FILTER_CONTROL : WAIT_RESET;

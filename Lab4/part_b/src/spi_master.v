@@ -104,7 +104,7 @@ always @(posedge clk or posedge reset) begin
         current_state <= next_state;
 end
 
-always @(current_state or enable or sclk_counter) begin
+always @(current_state or enable or sclk_counter or bit_counter) begin
     case (current_state)
         IDLE: next_state = (enable && sclk_counter == SHIFT_ON) ? LOAD : IDLE;
         LOAD: next_state = (sclk_counter == SAMPLE_ON) ? SAMPLE : LOAD;

@@ -31,7 +31,7 @@ module sprite_controller #(
     input up_ctrl, down_ctrl, left_ctrl, right_ctrl;
     input frame_end;
     input signed [11:0] x_accel, y_accel;
-    output reg signed [14:0] start_pos, end_pos;
+    output reg signed [13:0] start_pos, end_pos;
     output wire r, g, b;
 
     reg [1:0] frame_counter;
@@ -62,7 +62,7 @@ module sprite_controller #(
     always @(posedge clk) begin
         if (reset) begin
             color <= 3'b001;
-        end else if (frame_counter == FRAME_INTERVAL && frame_end
+        end else if (!accel_mode && !edit_mode && frame_counter == FRAME_INTERVAL && frame_end
         && ((x_pos + x_velocity + (WIDTH - 8'b1) == X_BOUNDARY || x_pos + x_velocity == 0) 
         || (y_pos + y_velocity + (HEIGHT - 8'b1) == Y_BOUNDARY || y_pos + y_velocity == 0))) begin // If any collision is about to happen
             if (color == 3'b111) begin // Don't use black color
@@ -77,7 +77,7 @@ module sprite_controller #(
         if (reset) begin
             x_velocity <= 6'd1;
             x_step <= 6'd1;
-        end else if (frame_counter == FRAME_INTERVAL && frame_end && 
+        end else if (!accel_mode && !edit_mode && frame_counter == FRAME_INTERVAL && frame_end && 
         (x_pos + x_velocity + (WIDTH - 8'b1) == X_BOUNDARY || x_pos + x_velocity == 0)) begin // Horizontal collision
             x_velocity <= -x_velocity;
             x_step <= -x_step;
@@ -88,7 +88,7 @@ module sprite_controller #(
         if (reset) begin
             y_velocity <= 6'd1;
             y_step <= X_BOUNDARY + 8'b1;
-        end else if (frame_counter == FRAME_INTERVAL && frame_end && 
+        end else if (!accel_mode && !edit_mode && frame_counter == FRAME_INTERVAL && frame_end && 
         (y_pos + y_velocity + (HEIGHT - 8'b1) == Y_BOUNDARY || y_pos + y_velocity == 0)) begin // Vertical collision
             y_velocity <= -y_velocity;
             y_step <= -y_step;

@@ -38,7 +38,7 @@ module command_sender (
 
     assign command_done = transmit_select == DATA && spi_ready;
 
-    always @(transmit_select) begin
+    always @(transmit_select or command or address or data) begin
         case (transmit_select)
             COMMAND: spi_transmit_data = command;
             ADDRESS: spi_transmit_data = address;
