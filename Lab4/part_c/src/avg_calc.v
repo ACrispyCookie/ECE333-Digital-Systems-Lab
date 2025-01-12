@@ -20,8 +20,8 @@ module avg_calc (
     output reg signed [18:0] t_avg;
     output reg ready;
 
-    reg [17:0] partial_sum_x, partial_sum_y, partial_sum_z;
-    reg [24:0] partial_sum_t;
+    reg signed [17:0] partial_sum_x, partial_sum_y, partial_sum_z;
+    reg signed [24:0] partial_sum_t;
     reg [5:0] partial_sum_count;
 
     always @(posedge clk or posedge reset) begin

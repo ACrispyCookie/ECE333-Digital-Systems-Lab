@@ -14,8 +14,8 @@ wire is_negative_X, is_negative_Y, is_negative_Z, is_negative_T;
 wire ready_X, ready_Y, ready_Z, ready_T;
 
 /* Value reader outputs */
-wire [11:0] X_val, Y_val, Z_val;
-wire [18:0] T_val;
+wire signed [11:0] X_val, Y_val, Z_val;
+wire signed [18:0] T_val;
 wire send, values_ready;
 wire [7:0] command, address, data;
 
