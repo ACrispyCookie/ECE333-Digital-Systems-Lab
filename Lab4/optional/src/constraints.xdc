@@ -32,3 +32,4 @@ set_property -dict { PACKAGE_PIN B12   IOSTANDARD LVCMOS33 } [get_ports { vga_vs
 ###
 set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { enable }];
 set_property -dict { PACKAGE_PIN L16   IOSTANDARD LVCMOS33 } [get_ports { edit_mode }]; #IO_L3N_T0_DQS_EMCCLK_14 Sch=sw[1]
+set_property -dict { PACKAGE_PIN M13   IOSTANDARD LVCMOS33 } [get_ports { accel_mode }]; #IO_L6N_T0_D08_VREF_14 Sch=sw[2]
