@@ -182,7 +182,7 @@ module value_reader (
                 send = 1'b1;
                 run_wait_counter = 1'b0;
                 run_read_counter = 1'b0;
-                command = 8'h0b;
+                command = 8'h0a;
                 address = 8'h2c;
                 data = 8'b00_0_1_0_100;
                 add_to_avg = 1'b0;
@@ -209,7 +209,7 @@ module value_reader (
                 send = 1'b1;
                 run_wait_counter = 1'b0;
                 run_read_counter = 1'b1;
-                command = 8'h0a;
+                command = 8'h0b;
                 address = 8'h0e;
                 data = 8'h0;
                 add_to_avg = 1'b0;
