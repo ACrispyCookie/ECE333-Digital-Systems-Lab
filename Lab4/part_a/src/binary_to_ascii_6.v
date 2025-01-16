@@ -30,8 +30,19 @@ module binary_to_ascii_6 (
     reg [3:0] bcd_1, bcd_2, bcd_3, bcd_4, bcd_5, bcd_6;
     reg [1:0] current_state, next_state;
     reg [4:0] shift_counter;
+    reg [2:0] wait_counter;
     reg [BINARY_WIDTH-2:0] binary_reg;
-    reg shift_enabled, adding_enabled, copy_binary;
+    reg shift_enabled, adding_enabled, copy_binary, wait_for_new;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            wait_counter <= 3'b0;
+        end else if (wait_for_new && wait_counter != WAIT_FOR_NEW_CYCLES) begin
+            wait_counter <= wait_counter + 3'b1;
+        end else if (copy_binary) begin
+            wait_counter <= 3'b0;
+        end
+    end
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin
@@ -47,6 +58,13 @@ module binary_to_ascii_6 (
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin
+            bcd_1 <= 4'd0;
+            bcd_2 <= 4'd0;
+            bcd_3 <= 4'd0;
+            bcd_4 <= 4'd0;
+            bcd_5 <= 4'd0;
+            bcd_6 <= 4'd0;
+        end else if (copy_binary) begin
             bcd_1 <= 4'd0;
             bcd_2 <= 4'd0;
             bcd_3 <= 4'd0;
@@ -84,9 +102,11 @@ module binary_to_ascii_6 (
 
     always @(current_state or start or shift_counter) begin
         case (current_state)
-            IDLE: next_state = start ? SHIFT : IDLE;
+            IDLE: next_state = start ? WAIT_FOR_NEW : IDLE;
+            WAIT_FOR_NEW: next_state = (wait_counter == WAIT_FOR_NEW_CYCLES) ? COPY : WAIT_FOR_NEW;
+            COPY: next_state = SHIFT;
             SHIFT: next_state = ADD;
-            ADD: next_state = shift_counter == BINARY_WIDTH-1 ? READY : SHIFT;
+            ADD: next_state = (shift_counter == BINARY_WIDTH-1) ? READY : SHIFT;
             READY: next_state = IDLE; 
             default: next_state = IDLE;
         endcase
@@ -95,33 +115,52 @@ module binary_to_ascii_6 (
     always @(current_state) begin
         case (current_state)
             IDLE: begin
+                copy_binary = 1'b0;
+                shift_enabled = 1'b0;
+                adding_enabled = 1'b0;
+                wait_for_new = 1'b1;
+                ready = 1'b0;
+            end
+            WAIT_FOR_NEW: begin
+                copy_binary = 1'b0;
+                shift_enabled = 1'b0;
+                adding_enabled = 1'b0;
+                wait_for_new = 1'b1;
+                ready = 1'b0;
+            end
+            COPY: begin
                 copy_binary = 1'b1;
                 shift_enabled = 1'b0;
                 adding_enabled = 1'b0;
+                wait_for_new = 1'b0;
                 ready = 1'b0;
             end
             SHIFT: begin
                 copy_binary = 1'b0;
                 shift_enabled = 1'b1;
                 adding_enabled = 1'b0;
+                wait_for_new = 1'b0;
                 ready = 1'b0;
             end
             ADD: begin
                 copy_binary = 1'b0;
                 shift_enabled = 1'b0;
                 adding_enabled = 1'b1;
+                wait_for_new = 1'b0;
                 ready = 1'b0;
             end
             READY: begin
                 copy_binary = 1'b0;
                 shift_enabled = 1'b0;
                 adding_enabled = 1'b0;
+                wait_for_new = 1'b0;
                 ready = 1'b1;
             end
             default: begin
                 copy_binary = 1'b0;
                 shift_enabled = 1'b0;
                 adding_enabled = 1'b0;
+                wait_for_new = 1'b0;
                 ready = 1'b0;
             end
         endcase
