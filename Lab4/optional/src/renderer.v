@@ -18,7 +18,7 @@ module renderer (
     parameter WAIT = 1'b0;
     parameter WRITE = 1'b1;
     parameter X_BOUNDARY = 7'd127;
-    parameter Y_BOUNDARY = 7'd96;
+    parameter Y_BOUNDARY = 7'd95;
 
     input clk, reset;
     input frame_end, edit_mode, accel_mode;

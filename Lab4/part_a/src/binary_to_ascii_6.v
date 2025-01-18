@@ -15,11 +15,14 @@ module binary_to_ascii_6 (
 
     localparam BINARY_WIDTH = 19;
     localparam ZERO_ASCII = 8'd48;
+    localparam WAIT_FOR_NEW_CYCLES = 3'd4;
     // FSM states
-    localparam IDLE = 2'd0;
-    localparam SHIFT = 2'd1;
-    localparam ADD = 2'd2;
-    localparam READY = 2'd3;
+    localparam IDLE = 3'd0;
+    localparam WAIT_FOR_NEW = 3'd1;
+    localparam COPY = 3'd2;
+    localparam SHIFT = 3'd3;
+    localparam ADD = 3'd4;
+    localparam READY = 3'd5;
 
     input clk, reset;
     input [BINARY_WIDTH-1:0] binary;
@@ -28,7 +31,7 @@ module binary_to_ascii_6 (
     output reg ready, is_negative;
 
     reg [3:0] bcd_1, bcd_2, bcd_3, bcd_4, bcd_5, bcd_6;
-    reg [1:0] current_state, next_state;
+    reg [2:0] current_state, next_state;
     reg [4:0] shift_counter;
     reg [2:0] wait_counter;
     reg [BINARY_WIDTH-2:0] binary_reg;
@@ -100,7 +103,7 @@ module binary_to_ascii_6 (
             current_state <= next_state; 
     end
 
-    always @(current_state or start or shift_counter) begin
+    always @(current_state or start or shift_counter or wait_counter) begin
         case (current_state)
             IDLE: next_state = start ? WAIT_FOR_NEW : IDLE;
             WAIT_FOR_NEW: next_state = (wait_counter == WAIT_FOR_NEW_CYCLES) ? COPY : WAIT_FOR_NEW;

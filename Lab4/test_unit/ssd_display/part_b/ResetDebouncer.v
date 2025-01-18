@@ -3,8 +3,8 @@ module ResetDebouncer(input clk, input input_bounce, output reg debounced, outpu
     reg input_2;
     reg [12:0] counter;
     wire counter_running = ~(input_1 ^ input_2);
-    assign debounced_on = counter_running && counter == 13'h1ffff && debounced;
-    assign debounced_off = counter_running && counter == 13'h1ffff && ~debounced;
+    assign debounced_on = counter_running && counter == 17'h1ffff && debounced;
+    assign debounced_off = counter_running && counter == 17'h1ffff && ~debounced;
 
     InputSynchronizer sync_inst(.clk(clk), .async_input(input_bounce), .sync_input(input_1));
 
@@ -13,7 +13,7 @@ module ResetDebouncer(input clk, input input_bounce, output reg debounced, outpu
     end
 
     always @(posedge clk) begin
-        if (counter == 13'h1ffff) begin
+        if (counter == 17'h1ffff) begin
             debounced <= input_2;
         end
         
