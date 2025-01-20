@@ -16,9 +16,9 @@ module part_a_tb;
         start = 1'b0;
         #300 reset = 1'b1;
         #100 reset = 1'b0;
-        binary = 12'b111111111111;
+        binary = 12'b1011_1000_0011;
         start = 1'b1;
-        #60 binary = 12'b111111111110;
+        // #60 binary = 12'b1011_1000_0011;
     end
 
 endmodule

@@ -100,8 +100,8 @@ module binary_to_ascii_4 (
             IDLE: next_state = start ? WAIT_FOR_NEW : IDLE;
             WAIT_FOR_NEW: next_state = (wait_counter == WAIT_FOR_NEW_CYCLES) ? COPY : WAIT_FOR_NEW;
             COPY: next_state = SHIFT;
-            SHIFT: next_state = ADD;
-            ADD: next_state = (shift_counter == BINARY_WIDTH-1) ? READY : SHIFT;
+            SHIFT: next_state = (shift_counter == BINARY_WIDTH-2) ? READY : ADD;
+            ADD: next_state = SHIFT;
             READY: next_state = IDLE; 
             default: next_state = IDLE;
         endcase

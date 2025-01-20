@@ -59,9 +59,9 @@ module value_reader (
     wire signed [11:0] x_binary, y_binary, z_binary;
     wire signed [18:0] t_binary;
 
-    assign x_binary = {x_raw[11], x_raw[11:1]};
-    assign y_binary = {y_raw[11], y_raw[11:1]};
-    assign z_binary = {z_raw[11], z_raw[11:1]};
+    assign x_binary = x_raw;
+    assign y_binary = y_raw;
+    assign z_binary = z_raw;
     assign t_binary = (t_raw << 6) + t_raw;
 
     /* Avg values */

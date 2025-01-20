@@ -1,9 +1,9 @@
 // Top module for accelerometer driver //
 
-module accelerometer_driver (clk, debounced_reset, miso, TxD, sclk, mosi, ss, an7, an6, an5, an4,
+module accelerometer_driver (clk, reset, miso, TxD, sclk, mosi, ss, an7, an6, an5, an4,
 an3, an2, an1, an0, a, b, c, d, e, f, g, dp, simple_mode, no_avg, binary_select, x_sel, y_sel, z_sel, t_sel, use_burst);
 
-input clk, debounced_reset, miso;
+input clk, reset, miso;
 input wire simple_mode, no_avg, binary_select, x_sel, y_sel, z_sel, t_sel, use_burst;
 output wire TxD, sclk, mosi, ss;
 output wire an7, an6, an5, an4, an3, an2, an1, an0, a, b, c, d, e, f, g, dp;
@@ -34,7 +34,7 @@ wire [7:0] received_data;
 wire [5:0] char0, char1, char2, char3, char4, char5, char6, char7;
 wire [11:0] x_binary, y_binary, z_binary, t_binary;
 
-// ResetDebouncer reset_debouncer_inst(.clk(clk), .input_bounce(reset), .debounced(debounced_reset), .debounced_off(), .debounced_on());
+ResetDebouncer reset_debouncer_inst(.clk(clk), .input_bounce(reset), .debounced(debounced_reset), .debounced_off(), .debounced_on());
 
 uart_transmitter_data_control uart_transmitter_data_control_inst(.clk(clk), .reset(debounced_reset), .TxD(TxD), .start_transmission(1'b1), .data_ready_for_printing(ready_T),
 .ascii_X1(ascii_X1), .ascii_X2(ascii_X2), .ascii_X3(ascii_X3), .ascii_X4(ascii_X4),

@@ -1,5 +1,5 @@
 module FourDigitLEDdriver(reset, clk, an7, an6, an5, an4, an3, an2, an1, an0,
-a, b, c, d, e, f, g, dp, char0, char1, char2, char3, char3, char4, char5, char6, char7);
+a, b, c, d, e, f, g, dp, char0, char1, char2, char3, char4, char5, char6, char7);
 
     input clk, reset;
     input [5:0] char0, char1, char2, char3, char4, char5, char6, char7;
