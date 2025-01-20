@@ -46,8 +46,8 @@ module sprite_controller #(
     assign r = color[0];
     assign g = color[1];
     assign b = color[2];
-    assign x_accel_scaled = {{4{x_accel[11]}}, x_accel[11:8]};
-    assign y_accel_scaled = {{4{y_accel[11]}}, y_accel[11:8]};
+    assign x_accel_scaled = x_accel >>> 4'd8;
+    assign y_accel_scaled = y_accel >>> 4'd8;
     assign x_step = right_collision ? right_remainder : (left_collision ? -x_pos : x_velocity);
     assign y_step = (down_collision ? down_remainder : (up_collision ? -y_pos : y_velocity)) << 7;
 

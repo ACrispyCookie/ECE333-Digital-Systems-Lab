@@ -70,10 +70,10 @@ module avg_calc (
             z_avg <= 12'd0;
             t_avg <= 19'd0;
         end else if (copy_values && partial_sum_count == 6'd63) begin
-            x_avg <= partial_sum_x >>> 3'd6;
-            y_avg <= partial_sum_y >>> 3'd6;
-            z_avg <= partial_sum_z >>> 3'd6;
-            t_avg <= partial_sum_t >>> 3'd6;
+            x_avg <= (partial_sum_x + x_binary) >>> 3'd6;
+            y_avg <= (partial_sum_y + y_binary) >>> 3'd6;
+            z_avg <= (partial_sum_z + z_binary) >>> 3'd6;
+            t_avg <= (partial_sum_t + t_binary) >>> 3'd6;
         end
     end
     
