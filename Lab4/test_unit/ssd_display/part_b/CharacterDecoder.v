@@ -1,6 +1,6 @@
 module CharacterDecoder(input [4:0] counter, 
-input [5:0] char0, input [5:0] char1, input [5:0] char2, input [5:0] char3, 
-input [5:0] char4, input [5:0] char5, input [5:0] char6, input [5:0] char7, 
+input char0, input char1, input char2, input char3, 
+input char4, input char5, input char6, input char7, 
 output reg [5:0] char);
     parameter AN0_CHAR_SET = 5'd4;
     parameter AN1_CHAR_SET = 5'd8;
@@ -11,7 +11,7 @@ output reg [5:0] char);
     parameter AN6_CHAR_SET = 5'd28;
     parameter AN7_CHAR_SET = 5'd0;
 
-    always @(counter) begin
+    always @(*) begin
         case (counter)
             AN7_CHAR_SET: char = char7;
             5'd31: char = char7;

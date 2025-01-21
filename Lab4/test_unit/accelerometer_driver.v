@@ -31,8 +31,9 @@ wire spi_ready;
 wire [7:0] received_data;
 
 /* SSD chars */
-wire [5:0] char0, char1, char2, char3, char4, char5, char6, char7;
-wire [11:0] x_binary, y_binary, z_binary, t_binary;
+wire char0, char1, char2, char3, char4, char5, char6, char7;
+wire signed [11:0] x_binary, y_binary, z_binary;
+wire signed [18:0] t_binary;
 
 ResetDebouncer reset_debouncer_inst(.clk(clk), .input_bounce(reset), .debounced(debounced_reset), .debounced_off(), .debounced_on());
 
@@ -67,7 +68,7 @@ command_sender command_sender_inst(.clk(clk), .reset(debounced_reset), .spi_enab
 spi_master spi_master_inst(.clk(clk), .reset(debounced_reset), .miso(miso), .sclk(sclk), .mosi(mosi), .ss(ss),
 .enable(spi_enable), .data_ready(spi_ready), .data_to_transmit(spi_transmit_data), .received_data(received_data));
 
-char_driver char_driver_inst(.clk(clk), .reset(reset), .simple_mode(simple_mode), .no_avg(no_avg), .binary_select(binary_select), .x_sel(x_sel), .y_sel(y_sel), .z_sel(z_sel), .t_sel(t_sel),
+char_driver char_driver_inst(.simple_mode(simple_mode), .no_avg(no_avg), .binary_select(binary_select), .x_sel(x_sel), .y_sel(y_sel), .z_sel(z_sel), .t_sel(t_sel),
 .x_binary(X_val), .y_binary(Y_val), .z_binary(Z_val), .t_binary(t_binary), .x_avg(X_val), .y_avg(Y_val), .z_avg(Z_val), .t_avg(t_avg), 
 .char0(char0), .char1(char1), .char2(char2), .char3(char3), .char4(char4), .char5(char5), .char6(char6), .char7(char7));
 

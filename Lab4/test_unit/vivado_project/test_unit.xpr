@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="39" Path="C:/Users/faidr/Desktop/University/ECE333/Lab4/test_unit/vivado_project/test_unit.xpr">
+<Project Version="7" Minor="39" Path="C:/Users/nikas/ownCloud/University/ECE333/Lab4/test_unit/vivado_project/test_unit.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="6e5e34edf5d643ec9c2c3b6c8c146380"/>
