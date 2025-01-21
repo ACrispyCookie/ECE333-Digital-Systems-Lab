@@ -1,3 +1,42 @@
+/*
+This module converts a 19-bit signed binary number into its 
+4-digit ASCII decimal representation, along with an indicator 
+for whether the input number is negative.
+
+Inputs:
+  - clk: Clock signal.
+  - reset: Asynchronous reset signal.
+  - binary: 19-bit signed binary input number (2's complement representation).
+  - start: Start signal to initiate the conversion process.
+
+Outputs:
+  - ascii_1, ascii_2, ascii_3, ascii_4, ascii_5, ascii_6: 8-bit ASCII codes for the decimal digits
+    representing the binary input. ascii_1 corresponds to the most significant 
+    digit, while ascii_6 corresponds to the least significant digit.
+  - is_negative: Indicates whether the input number is negative.
+  - ready: High when the module has completed the conversion process and the 
+    ASCII outputs are valid.
+
+Functionality:
+  1. The module uses a Finite State Machine (FSM) with six states:
+     - IDLE: Waits for the start signal.
+     - WAIT_FOR_NEW: Waits if the last conversion was completed less than 
+       WAIT_FOR_NEW_CYCLES cycles ago.
+     - COPY: Copies the binary input to a register, determines the sign and resets internal registers.
+     - SHIFT: Performs the binary-to-BCD conversion by left-shifting the binary
+       input and accumulating results in BCD registers.
+     - ADD: Adjusts BCD digits according to the Double Dabble algorithm.
+     - READY: Signals the completion of the conversion process.
+  2. The conversion process uses the Double Dabble algorithm to efficiently
+     convert the binary input into its decimal representation in BCD format.
+  3. Outputs are converted from BCD to ASCII by adding the ASCII offset for
+     the digit '0' (48 in decimal).
+
+Parameters:
+  - BINARY_WIDTH: Width of the binary input (default: 19 bits).
+  - ZERO_ASCII: ASCII value of the digit '0' (default: 48).
+  - WAIT_FOR_NEW_CYCLES: Number of cycles to wait before a new conversion starts.
+*/
 module binary_to_ascii_6 (
     clk,
     reset,
@@ -13,10 +52,12 @@ module binary_to_ascii_6 (
     ready
 );
 
+    /* Parameters */
     localparam BINARY_WIDTH = 19;
     localparam ZERO_ASCII = 8'd48;
     localparam WAIT_FOR_NEW_CYCLES = 3'd4;
-    // FSM states
+
+    /* FSM states */
     localparam IDLE = 3'd0;
     localparam WAIT_FOR_NEW = 3'd1;
     localparam COPY = 3'd2;
@@ -24,12 +65,14 @@ module binary_to_ascii_6 (
     localparam ADD = 3'd4;
     localparam READY = 3'd5;
 
+    /* Inputs/Outputs */
     input clk, reset;
     input [BINARY_WIDTH-1:0] binary;
     input start;
     output wire [7:0] ascii_1, ascii_2, ascii_3, ascii_4, ascii_5, ascii_6;
     output reg ready, is_negative;
 
+    /* Internal signals */
     reg [3:0] bcd_1, bcd_2, bcd_3, bcd_4, bcd_5, bcd_6;
     reg [2:0] current_state, next_state;
     reg [4:0] shift_counter;
@@ -91,7 +134,7 @@ module binary_to_ascii_6 (
             shift_counter <= 5'd0;
         end else if (shift_enabled) begin
             shift_counter <= shift_counter + 5'b1;
-        end else if (!adding_enabled) begin
+        end else if (copy_binary) begin
             shift_counter <= 5'd0;
         end
     end
