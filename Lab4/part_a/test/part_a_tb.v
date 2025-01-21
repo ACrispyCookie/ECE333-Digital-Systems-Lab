@@ -7,7 +7,7 @@ to the binary_to_ascii_4 module and then transmitting the ASCII characters
 module part_a_tb;
     reg clk, reset;
     reg start;
-    reg [11:0] binary;
+    reg [18:0] binary;
     wire TxD;
 
     localparam CLK_PERIOD = 10;
@@ -21,7 +21,7 @@ module part_a_tb;
         start = 1'b0;
         #300 reset = 1'b1;
         #100 reset = 1'b0;
-        binary = 12'b1011_1000_0011;
+        binary = 19'b000_1001_1010_0011_0111;
         start = 1'b1;
     end
 
