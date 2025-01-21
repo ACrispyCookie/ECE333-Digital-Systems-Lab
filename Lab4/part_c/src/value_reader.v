@@ -1,3 +1,73 @@
+/*
+This module acts as a controller for reading sensor data and calculating 
+averages over time. It coordinates with the `command_sender` module to send 
+SPI commands, addresses, and data to the sensor, and handles the reception of 
+raw sensor data for processing. The module uses a finite state machine (FSM) 
+to manage the sequence of operations, including sensor initialization, data 
+reading, and averaging of the collected values.
+
+Inputs:
+  - clk: System clock input.
+  - reset: Asynchronous reset signal, active high.
+  - command_done: Indicates when the `command_sender` module has completed 
+    sending the current command or data byte.
+  - received_data: 8-bit data received from the sensor via the `command_sender` 
+    module during the data reading process.
+  - values_ready: Indicates when the averaged sensor values are ready for use.
+  - x_avg, y_avg, z_avg: 12-bit output values representing the average of the 
+    sensor data for X, Y, and Z axes.
+  - t_avg: 18-bit output value representing the averaged temperature data.
+
+Outputs:
+  - send: Control signal to initiate the transmission of commands and data 
+    through the `command_sender` module.
+  - command: 8-bit command byte to be sent first via the `command_sender` module.
+  - address: 8-bit address byte to be sent second via the `command_sender` module.
+  - data: 8-bit data byte to be sent third via the `command_sender` module.
+  - x_raw, y_raw, z_raw, t_raw: 12-bit signed raw sensor data for X, Y, Z, and 
+    temperature readings.
+
+FSM States:
+  - RESET: Resets the sensor and prepares for data collection.
+  - WAIT_RESET: Waits for the sensor reset process to complete.
+  - FILTER_CONTROL: Configures filtering settings on the sensor.
+  - POWER_CONTROL: Configures power control settings on the sensor.
+  - INIT_DONE: Marks the completion of sensor initialization.
+  - READ: Reads the raw data from the sensor (X, Y, Z, T).
+  - COPY_TO_AVG: Sends the collected raw data to the averaging module.
+  - READ_DONE: Marks the completion of the data reading and waits for the next reading to start.
+
+Parameters:
+  - RESET_WAIT_TIME: Time period to wait for the sensor reset to complete.
+  - READ_WAIT_TIME: Time period to wait after reading the data before the next operation.
+
+Internal Signals:
+  - current_state: The current state of the FSM.
+  - next_state: The next state of the FSM, determined by inputs and current state.
+  - wait_counter: A counter to keep track of the wait time for reset and read operations.
+  - read_counter: A counter to track the read stages for X, Y, Z, and temperature data.
+  - add_to_avg: Signal that copies the read data to the average calculator.
+
+Functionality:
+  1. **Sensor Data Reading**:
+     - The module coordinates with the `command_sender` module to send commands 
+       to the sensor to configure its settings (e.g., filter and power control), 
+       and then reads the raw data from the sensor in multiple stages (X, Y, Z, T).
+     - The data is read sequentially with each byte received from the sensor, 
+       using SPI communication handled by the `command_sender` module.
+  2. **Averaging**:
+     - Once the raw data is collected, it is passed to the `avg_calc` module 
+       which computes the average values for X, Y, Z, and temperature.
+     - The averaged values are outputted as `x_avg`, `y_avg`, `z_avg`, and `t_avg`.
+  3. **FSM Operation**:
+     - The FSM controls the state transitions, including resetting the sensor, 
+       reading the sensor values, and copying them to the averaging module.
+     - The module operates in a sequence from initialization to the completion of 
+       the reading and averaging process.
+  5. **Sensor Configuration**:
+     - The module configures the sensor's filtering and power settings before 
+       initiating data collection to ensure correct readings.
+*/
 module value_reader (
     clk,
     reset,

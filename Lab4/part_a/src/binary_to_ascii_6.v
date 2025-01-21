@@ -32,6 +32,14 @@ Functionality:
   3. Outputs are converted from BCD to ASCII by adding the ASCII offset for
      the digit '0' (48 in decimal).
 
+Internal Signals:
+  - current_state, next_state: Registers to manage the current and next FSM states.
+  - bcd_1, bcd_2, bcd_3, bcd_4: Registers to store the 4-digit Binary-Coded Decimal (BCD) representation.
+  - binary_reg: Register to store the absolute value of the binary input for processing.
+  - shift_counter: Counter to track the number of shifts during the binary-to-BCD conversion.
+  - wait_counter: Counter to implement the delay between consecutive conversions.
+  - shift_enabled, adding_enabled, copy_binary, wait_for_new: Control signals for FSM operation.
+
 Parameters:
   - BINARY_WIDTH: Width of the binary input (default: 19 bits).
   - ZERO_ASCII: ASCII value of the digit '0' (default: 48).

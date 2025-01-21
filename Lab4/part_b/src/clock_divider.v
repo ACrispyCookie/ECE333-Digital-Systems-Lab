@@ -1,3 +1,26 @@
+/*
+This module generates a divided clock signal (`new_clk`) from an 
+input clock (`clk`) using the Xilinx MMCM (Mixed-Mode Clock Manager). 
+It also provides a synchronized locked signal (`locked_sync`) to 
+indicate the stability of the generated clock.
+
+Inputs:
+  - clk: Primary input clock signal.
+  - reset: Asynchronous reset signal. Resets the locked synchronization signal.
+
+Outputs:
+  - new_clk: Generated clock signal with a frequency divided as per the MMCM 
+             configuration. (In this case 5Mhz)
+  - locked_sync: Synchronized "locked" signal to indicate that the MMCM has 
+                 locked onto the input clock and the output clock is stable.
+
+Functionality:
+  1. The module uses the Xilinx MMCME2_BASE primitive to create a new clock 
+     signal with a specified frequency based on the input clock.
+  2. The `locked` signal from the MMCM is synchronized with the divided clock
+     (`new_clk`) to produce `locked_sync`.
+  3. The module includes feedback connections to ensure proper MMCM operation.
+*/
 module clock_divider (
     clk,
     reset,

@@ -1,4 +1,8 @@
 `timescale 1ns/10ps
+/* 
+Tests the functionality of the SPI master and slave modules by sending data
+from the master to the slave and receiving data back.
+*/
 module part_b_tb;
 reg clk, reset;
 reg enable;

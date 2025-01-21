@@ -1,3 +1,5 @@
+/* Simple SPI Slave module that receives data from the SPI master
+   and transmits the same 4 bytes of data back to the master. */
 module spi_slave (
     clk,
     reset,
@@ -8,6 +10,7 @@ module spi_slave (
     received_data
 );
 
+/* Inputs/Outputs */
 input clk, reset, ss;
 output reg ready;
 output reg [7:0] received_data;
