@@ -1,0 +1,43 @@
+# OS/editor metadata
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# Icarus Verilog / waveform outputs
+*.vvp
+*.vcd
+*.fst
+*.lxt
+*.out
+a.out
+target/
+build/
+
+# Vivado generated outputs
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+.Xil/
+*.jou
+*.log
+*.pb
+*.rpt
+*.rpx
+*.dcp
+*.bit
+*.vdi
+*.vds
+*.wdf
+*.wpc
+*.lpr
+
+# Submission bundles/backups
+*.zip
+*.rar
+*.7z
+*Security copy*
