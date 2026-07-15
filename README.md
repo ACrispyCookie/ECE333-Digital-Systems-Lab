@@ -18,6 +18,7 @@ Coursework repository for ECE333 Digital Systems Lab. The labs build FPGA digita
 
 **Lab 4 custom extension demo — accelerometer-controlled VGA sprite**
 
+https://github.com/user-attachments/assets/1549df07-594a-4e26-9d4d-d74dd1c7e6ee
 
 ## Lab contents
 
