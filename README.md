@@ -1,4 +1,4 @@
-# ECE333 Digital Systems Lab
+# ECE333 — Digital Systems Lab
 
 ![Verilog](https://img.shields.io/badge/Verilog-RTL-blue)
 ![Vivado](https://img.shields.io/badge/Xilinx-Vivado-F15B2A)
@@ -106,3 +106,4 @@ For the full demos, use the Nexys A7 flow in Vivado:
 5. For Lab 4, connect the accelerometer/VGA setup to see live accelerometer movement drive the on-screen sprite.
 
 The Lab 4 extension is the most complete system-level demo: sensor input enters through the SPI accelerometer path, is interpreted by the Verilog control logic, and is then used by the reused VGA renderer to move a sprite on screen.
+
