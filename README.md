@@ -9,6 +9,10 @@
 
 Coursework repository for ECE333 Digital Systems Lab. The labs build FPGA digital systems in Verilog, starting with seven-segment display logic and moving through UART communication, VGA graphics, SPI accelerometer interfacing, and full-system integration on the Nexys A7 platform.
 
+<p align="center">
+  <img src="docs/images/ece333-lab-progression.svg" alt="ECE333 lab progression from display drivers to UART, VGA, SPI, and the final accelerometer-controlled graphics extension" width="100%">
+</p>
+
 ## Standout work
 
 - **Lab 3 optional VGA extension:** implemented the optional video-display requirements, including a VGA driver capable of rendering image data and animated sprites on the board.
@@ -38,6 +42,10 @@ Lab 1 introduces seven-segment display control on the Nexys A7. It starts with a
 
 Lab 2 develops a serial communication stack in stages: baud-rate timing, transmission, reception, parity/framing error handling, message buffering, and an integrated UART-to-display controller. The report documents eight selectable baud rates, the 16x receiver sampling requirement, transmitter/receiver Moore FSMs, parity and framing error test cases, and the optional path that displays received UART messages on the seven-segment display.
 
+<p align="center">
+  <img src="docs/images/uart-pipeline.svg" alt="Lab 2 UART transmitter receiver controller and seven-segment display pipeline" width="100%">
+</p>
+
 ### Lab 3 - VGA graphics and sprite rendering
 
 Lab 3 builds a VGA graphics path using generated VRAM data, pixel addressing, horizontal/vertical sync control, and image rendering logic. The design instantiates separate BRAM-backed VRAM modules for red, green, and blue, initializes them from Python-generated image data, and upscales 128x96 memory contents to 640x480 output through the sync/pixel-control pipeline. The optional part extends the base graphics pipeline into a sprite-capable display system, including a DVD-logo-style animation path that updates the sprite between frames instead of only showing static pixel output.
@@ -47,6 +55,10 @@ Lab 3 builds a VGA graphics path using generated VRAM data, pixel addressing, ho
 Lab 4 connects an SPI accelerometer data path to downstream formatting and output modules. It includes a double-dabble binary-to-BCD/ASCII converter, a 5 MHz SPI master driven from an MMCM-derived serial clock, SPI command/value-reader logic for the ADXL362 accelerometer, averaging support, UART transmission, and display test units.
 
 The custom extension connects this accelerometer pipeline to the VGA/sprite work from Lab 3, turning live sensor readings into on-screen sprite movement. That makes the final design a cross-lab FPGA system: SPI input from the accelerometer drives graphics output through the reused VGA renderer.
+
+<p align="center">
+  <img src="docs/images/accelerometer-vga-architecture.svg" alt="Lab 4 accelerometer readings driving the Lab 3 VGA sprite renderer" width="100%">
+</p>
 
 ## Requirements
 
