@@ -32,19 +32,19 @@ https://github.com/user-attachments/assets/1549df07-594a-4e26-9d4d-d74dd1c7e6ee
 
 ### Lab 1 - Display drivers
 
-Lab 1 introduces seven-segment display control on the Nexys A7. It starts with a basic LED decoder and expands into a multiplexed four-digit display driver with counters, input synchronization, debouncing, and board constraints.
+Lab 1 introduces seven-segment display control on the Nexys A7. It starts with a basic LED decoder and expands into a multiplexed four-digit display driver with counters, input synchronization, debouncing, and board constraints. The design supports the lab's rotating 16-character message flow, first stepped by button input and then advanced automatically after a fixed delay.
 
 ### Lab 2 - UART pipeline
 
-Lab 2 develops a serial communication stack in stages: baud-rate timing, transmission, reception, parity/framing error handling, message buffering, and an integrated UART-to-display controller.
+Lab 2 develops a serial communication stack in stages: baud-rate timing, transmission, reception, parity/framing error handling, message buffering, and an integrated UART-to-display controller. The report documents eight selectable baud rates, the 16x receiver sampling requirement, transmitter/receiver Moore FSMs, parity and framing error test cases, and the optional path that displays received UART messages on the seven-segment display.
 
 ### Lab 3 - VGA graphics and sprite rendering
 
-Lab 3 builds a VGA graphics path using generated VRAM data, pixel addressing, horizontal/vertical sync control, and image rendering logic. The optional part extends the base graphics pipeline into a sprite-capable display system, including a DVD-logo-style animation path that demonstrates moving graphics rather than only static pixel output.
+Lab 3 builds a VGA graphics path using generated VRAM data, pixel addressing, horizontal/vertical sync control, and image rendering logic. The design instantiates separate BRAM-backed VRAM modules for red, green, and blue, initializes them from Python-generated image data, and upscales 128x96 memory contents to 640x480 output through the sync/pixel-control pipeline. The optional part extends the base graphics pipeline into a sprite-capable display system, including a DVD-logo-style animation path that updates the sprite between frames instead of only showing static pixel output.
 
 ### Lab 4 - SPI accelerometer system and VGA extension
 
-Lab 4 connects an SPI accelerometer data path to downstream formatting and output modules. It includes SPI command/value-reader logic, binary-to-ASCII conversion, UART transmission, and display test units.
+Lab 4 connects an SPI accelerometer data path to downstream formatting and output modules. It includes a double-dabble binary-to-BCD/ASCII converter, a 5 MHz SPI master driven from an MMCM-derived serial clock, SPI command/value-reader logic for the ADXL362 accelerometer, averaging support, UART transmission, and display test units.
 
 The custom extension connects this accelerometer pipeline to the VGA/sprite work from Lab 3, turning live sensor readings into on-screen sprite movement. That makes the final design a cross-lab FPGA system: SPI input from the accelerometer drives graphics output through the reused VGA renderer.
 
