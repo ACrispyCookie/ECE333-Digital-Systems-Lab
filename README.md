@@ -27,6 +27,8 @@ https://github.com/user-attachments/assets/1549df07-594a-4e26-9d4d-d74dd1c7e6ee
 
 ## Lab contents
 
+Lab handouts are collected under [`docs/handouts/`](docs/handouts/). Reports for Labs 1–3 are collected under [`docs/reports/`](docs/reports/). The Lab 4 presentation PDF is collected under [`docs/presentations/`](docs/presentations/).
+
 | Lab | Contents | Design documentation |
 | --- | --- | --- |
 | [`Lab1/`](Lab1/) | Seven-segment display systems: LED decoder, multiplexed four-digit display driver, debouncers, counters, and Nexys A7 constraints. | [`part_b/FourDigitLEDdriver`](Lab1/part_b/dataflow/FourDigitLEDdriver.drawio), [`part_c/FourDigitLEDdriver`](Lab1/part_c/dataflow/FourDigitLEDdriver.drawio), [`part_d/FourDigitLEDdriver`](Lab1/part_d/dataflow/FourDigitLEDdriver.drawio) |
