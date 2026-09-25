@@ -149,7 +149,7 @@ always @(posedge clk or posedge reset) begin
     if (reset)
         received_data <= 8'b0;
     else if (copy_output)
-        received_data <= shift_register;
+        received_data <= {shift_register[7:1], miso};
 end
 
 always @(posedge clk or posedge reset) begin
