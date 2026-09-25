@@ -21,6 +21,8 @@ Coursework repository for **ECE333 — Digital Systems Lab** at the **University
 - Built the supporting RTL around those demos: VGA timing, BRAM-backed pixel/sprite data, SPI command sequencing, accelerometer value reading, formatting logic, UART reporting, and display-oriented test units.
 - Included block/dataflow/FSM diagrams throughout the labs so the architecture is easy to inspect alongside the Verilog implementation.
 
+> **Newer, improved standalone version:** [DVD Logo FPGA](https://github.com/ACrispyCookie/DVD-Logo-FPGA) is the more robust continuation of the display and sprite side of this standout work, with HDMI output, corrected edge-collision behavior, complete 51×23 sprite rendering, color-changing animation, and Smart Zynq SL support.
+
 **Lab 4 custom extension demo — accelerometer-controlled VGA sprite**
 
 https://github.com/user-attachments/assets/1549df07-594a-4e26-9d4d-d74dd1c7e6ee
