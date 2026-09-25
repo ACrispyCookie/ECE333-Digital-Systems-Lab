@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1780" viewBox="0 0 1200 1780" role="img" aria-labelledby="title desc">
+  <title id="title">Lab 4 accelerometer controlled VGA sprite architecture</title>
+  <desc id="desc">Mobile-friendly vertical architecture diagram for the Lab 4 extension where ADXL362 SPI sensor readings drive VGA sprite rendering.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#07111f"/><stop offset="1" stop-color="#1f2937"/></linearGradient>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".28"/></filter>
+    <style>
+      .title{font:800 43px Inter,Segoe UI,sans-serif;fill:#e0f2fe}.sub{font:500 23px Inter,Segoe UI,sans-serif;fill:#bfdbfe}
+      .section{font:800 24px Inter,Segoe UI,sans-serif;fill:#93c5fd}.card{rx:24;fill:#0f172a;stroke:#334155;stroke-width:2.4;filter:url(#shadow)}.sensor{rx:20;fill:#3b1d2a;stroke:#fb7185;stroke-width:2.6}.module{rx:20;fill:#11283b;stroke:#38bdf8;stroke-width:2.6}.vga{rx:20;fill:#1b2d22;stroke:#86efac;stroke-width:2.6}.mem{rx:20;fill:#33260d;stroke:#fbbf24;stroke-width:2.6}
+      .numBg{fill:#67e8f9}.num{font:800 22px Inter,Segoe UI,sans-serif;fill:#0f172a}.head{font:800 28px Inter,Segoe UI,sans-serif;fill:#f8fafc}.txt{font:500 22px Inter,Segoe UI,sans-serif;fill:#cbd5e1}.small{font:600 18px Inter,Segoe UI,sans-serif;fill:#aebed0}.chevBlue{fill:#67e8f9}.chevPink{fill:#fb7185}.chevGreen{fill:#86efac}.screen{fill:#020617;stroke:#60a5fa;stroke-width:5}.sprite{fill:#facc15;stroke:#fde68a;stroke-width:3}.badge{rx:12;fill:#67e8f9}.badget{font:800 15px Inter,Segoe UI,sans-serif;fill:#0f172a}.note{font:700 17px Inter,Segoe UI,sans-serif;fill:#e2e8f0}
+    </style>
+  </defs>
+  <rect width="1200" height="1780" fill="url(#bg)"/>
+  <path d="M0 1620 C200 1560 365 1680 610 1624 C815 1575 990 1648 1200 1588 L1200 1780 L0 1780 Z" fill="#0f766e" opacity=".14"/>
+  <text x="60" y="74" class="title">Lab 4 extension</text>
+  <text x="60" y="122" class="title">Accelerometer-controlled VGA sprite</text>
+  <text x="62" y="170" class="sub">Sensor input is converted to a motion vector,</text>
+  <text x="62" y="204" class="sub">then used to update the VGA sprite pipeline.</text>
+
+  <text x="70" y="275" class="section">Sensor input and control logic</text>
+
+  <g transform="translate(70,310)">
+    <rect width="1060" height="145" class="sensor"/>
+    <circle cx="52" cy="72" r="27" class="numBg"/><text x="52" y="80" text-anchor="middle" class="num">1</text>
+    <text x="100" y="58" class="head">ADXL362 accelerometer</text>
+    <text x="100" y="96" class="txt">Provides live X/Y/Z motion samples from the board sensor.</text>
+    <text x="845" y="86" text-anchor="middle" class="note">physical input</text>
+  </g>
+  <path d="M560 482 h80 l-40 54 z" class="chevPink"/>
+  <text x="642" y="520" class="note">SPI bus</text>
+
+  <g transform="translate(70,565)">
+    <rect width="1060" height="145" class="module"/>
+    <circle cx="52" cy="72" r="27" class="numBg"/><text x="52" y="80" text-anchor="middle" class="num">2</text>
+    <text x="100" y="58" class="head">SPI master</text>
+    <text x="100" y="96" class="txt">Generates the serial clock and transfers commands/responses.</text>
+    <text x="835" y="86" text-anchor="middle" class="note">5 MHz SPI</text>
+  </g>
+  <path d="M560 737 h80 l-40 54 z" class="chevBlue"/>
+
+  <g transform="translate(70,820)">
+    <rect width="1060" height="160" class="module"/>
+    <circle cx="52" cy="80" r="27" class="numBg"/><text x="52" y="88" text-anchor="middle" class="num">3</text>
+    <text x="100" y="62" class="head">Command sender + value reader</text>
+    <text x="100" y="100" class="txt">Sends accelerometer register commands, reads samples,</text>
+    <text x="100" y="132" class="txt">and averages values into a stable motion vector.</text>
+    <text x="850" y="106" text-anchor="middle" class="note">motion vector</text>
+  </g>
+  <path d="M560 1008 h80 l-40 54 z" class="chevBlue"/>
+
+  <text x="70" y="1118" class="section">Graphics path reused from Lab 3</text>
+
+  <g transform="translate(70,1155)">
+    <rect width="1060" height="145" class="vga"/>
+    <circle cx="52" cy="72" r="27" class="numBg"/><text x="52" y="80" text-anchor="middle" class="num">4</text>
+    <text x="100" y="58" class="head">Sprite controller</text>
+    <text x="100" y="96" class="txt">Maps the motion vector to updated on-screen sprite position.</text>
+    <text x="855" y="86" text-anchor="middle" class="note">position update</text>
+  </g>
+  <path d="M560 1327 h80 l-40 54 z" class="chevGreen"/>
+
+  <g transform="translate(70,1410)">
+    <rect width="505" height="160" class="mem"/>
+    <circle cx="52" cy="80" r="27" class="numBg"/><text x="52" y="88" text-anchor="middle" class="num">5</text>
+    <text x="100" y="62" class="head">Sprite VRAM</text>
+    <text x="100" y="100" class="txt">BRAM-backed</text>
+    <text x="100" y="132" class="txt">RGB sprite data</text>
+
+    <rect x="555" width="505" height="160" class="vga"/>
+    <circle cx="607" cy="80" r="27" class="numBg"/><text x="607" y="88" text-anchor="middle" class="num">6</text>
+    <text x="655" y="62" class="head">VGA renderer</text>
+    <text x="655" y="100" class="txt">Sync + pixel path</text>
+    <text x="655" y="132" class="txt">for 640×480 output</text>
+  </g>
+  <path d="M560 1597 h80 l-40 54 z" class="chevGreen"/>
+
+  <g transform="translate(70,1668)">
+    <rect x="0" y="0" width="185" height="76" rx="15" class="screen"/>
+    <rect x="24" y="15" width="136" height="42" fill="#1d4ed8"/>
+    <circle cx="92" cy="36" r="14" class="sprite"/>
+    <text x="230" y="48" class="head">VGA monitor shows the moving sprite</text>
+    <rect x="810" y="20" width="112" height="38" class="badge"/><text x="866" y="46" text-anchor="middle" class="badget">SPI INPUT</text>
+    <rect x="942" y="20" width="144" height="38" class="badge"/><text x="1014" y="46" text-anchor="middle" class="badget">VGA OUTPUT</text>
+  </g>
+</svg>
