@@ -16,12 +16,12 @@ Coursework repository for **ECE333 — Digital Systems Lab** at the **University
 
 ## Standout work: accelerometer-controlled VGA sprite
 
+> **Newer, improved standalone version:** [DVD Logo FPGA](https://github.com/ACrispyCookie/DVD-Logo-FPGA) is the more robust continuation of the display and sprite side of this standout work, with HDMI output, corrected edge-collision behavior, complete 51×23 sprite rendering, color-changing animation, and Smart Zynq SL support.
+
 - **Lab 3 optional VGA extension:** implemented the optional video-display requirements, including a VGA driver capable of rendering image data and animated sprites on the board.
 - **Lab 4 custom accelerometer-controlled graphics extension:** went beyond the assignment requirements by connecting the Lab 4 SPI accelerometer pipeline back into the Lab 3 VGA/sprite system, using live accelerometer readings to move a sprite on screen.
 - Built the supporting RTL around those demos: VGA timing, BRAM-backed pixel/sprite data, SPI command sequencing, accelerometer value reading, formatting logic, UART reporting, and display-oriented test units.
 - Included block/dataflow/FSM diagrams throughout the labs so the architecture is easy to inspect alongside the Verilog implementation.
-
-> **Newer, improved standalone version:** [DVD Logo FPGA](https://github.com/ACrispyCookie/DVD-Logo-FPGA) is the more robust continuation of the display and sprite side of this standout work, with HDMI output, corrected edge-collision behavior, complete 51×23 sprite rendering, color-changing animation, and Smart Zynq SL support.
 
 **Lab 4 custom extension demo — accelerometer-controlled VGA sprite**
 
