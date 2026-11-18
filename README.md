@@ -14,14 +14,14 @@ Coursework repository for **ECE333 — Digital Systems Lab** at the **University
   <img src="docs/images/ece333-lab-progression.svg" alt="ECE333 lab progression from display drivers to UART, VGA, SPI, and the final accelerometer-controlled graphics extension" width="100%">
 </p>
 
-## Standout work: accelerometer-controlled VGA sprite
+## Highlight: accelerometer-controlled VGA sprite
 
-> **Newer, improved standalone version:** [DVD Logo FPGA](https://github.com/ACrispyCookie/DVD-Logo-FPGA) is the more robust continuation of the display and sprite side of this standout work, with HDMI output, corrected edge-collision behavior, complete 51×23 sprite rendering, color-changing animation, and Smart Zynq SL support.
+> **Newer standalone version:** [DVD Logo FPGA](https://github.com/ACrispyCookie/DVD-Logo-FPGA) continues the display and sprite part of this work with HDMI output, fixed edge collisions, full 51×23 sprite rendering, color-changing animation, and Smart Zynq SL support.
 
-- **Lab 3 optional VGA extension:** implemented the optional video-display requirements, including a VGA driver capable of rendering image data and animated sprites on the board.
-- **Lab 4 custom accelerometer-controlled graphics extension:** went beyond the assignment requirements by connecting the Lab 4 SPI accelerometer pipeline back into the Lab 3 VGA/sprite system, using live accelerometer readings to move a sprite on screen.
-- Built the supporting RTL around those demos: VGA timing, BRAM-backed pixel/sprite data, SPI command sequencing, accelerometer value reading, formatting logic, UART reporting, and display-oriented test units.
-- Included block/dataflow/FSM diagrams throughout the labs so the architecture is easy to inspect alongside the Verilog implementation.
+- **Lab 3 optional VGA part:** a VGA driver that renders image data and animated sprites on the board.
+- **Lab 4 extension (not part of the assignment):** the Lab 4 SPI accelerometer pipeline feeds the Lab 3 VGA sprite system, so tilting the board moves the sprite on screen.
+- Supporting RTL: VGA timing, BRAM-backed pixel/sprite data, SPI command sequencing, accelerometer value reading, formatting logic, UART reporting, and display-oriented test units.
+- Block, dataflow, and FSM diagrams (draw.io) sit next to the Verilog in each lab.
 
 **Lab 4 custom extension demo — accelerometer-controlled VGA sprite**
 
@@ -29,7 +29,7 @@ https://github.com/user-attachments/assets/1549df07-594a-4e26-9d4d-d74dd1c7e6ee
 
 ## Lab contents
 
-Lab handouts are collected under [`docs/handouts/`](docs/handouts/). Reports for Labs 1–3 are collected under [`docs/reports/`](docs/reports/). The Lab 4 presentation PDF is collected under [`docs/presentations/`](docs/presentations/).
+Handouts are in [`docs/handouts/`](docs/handouts/), reports for Labs 1–3 in [`docs/reports/`](docs/reports/), and the Lab 4 presentation in [`docs/presentations/`](docs/presentations/).
 
 | Lab | Contents | Design documentation |
 | --- | --- | --- |
@@ -53,13 +53,13 @@ Lab 2 develops a serial communication stack in stages: baud-rate timing, transmi
 
 ### Lab 3 - VGA graphics and sprite rendering
 
-Lab 3 builds a VGA graphics path using generated VRAM data, pixel addressing, horizontal/vertical sync control, and image rendering logic. The design instantiates separate BRAM-backed VRAM modules for red, green, and blue, initializes them from Python-generated image data, and upscales 128x96 memory contents to 640x480 output through the sync/pixel-control pipeline. The optional part extends the base graphics pipeline into a sprite-capable display system, including a DVD-logo-style animation path that updates the sprite between frames instead of only showing static pixel output.
+Lab 3 builds a VGA graphics path using generated VRAM data, pixel addressing, horizontal/vertical sync control, and image rendering logic. The design instantiates separate BRAM-backed VRAM modules for red, green, and blue, initializes them from Python-generated image data, and upscales 128x96 memory contents to 640x480 output through the sync/pixel-control pipeline. The optional part adds sprite support, including a DVD-logo-style animation that moves the sprite between frames.
 
 ### Lab 4 - SPI accelerometer system and VGA extension
 
 Lab 4 connects an SPI accelerometer data path to downstream formatting and output modules. It includes a double-dabble binary-to-BCD/ASCII converter, a 5 MHz SPI master driven from an MMCM-derived serial clock, SPI command/value-reader logic for the ADXL362 accelerometer, averaging support, UART transmission, and display test units.
 
-The custom extension connects this accelerometer pipeline to the VGA/sprite work from Lab 3, turning live sensor readings into on-screen sprite movement. That makes the final design a cross-lab FPGA system: SPI input from the accelerometer drives graphics output through the reused VGA renderer.
+The extension connects this accelerometer pipeline to the Lab 3 VGA sprite renderer, so live sensor readings move the sprite on screen.
 
 <p align="center">
   <img src="docs/images/accelerometer-vga-architecture.svg" alt="Lab 4 accelerometer readings driving the Lab 3 VGA sprite renderer" width="100%">
@@ -106,11 +106,11 @@ sudo apt install iverilog
 make check
 ```
 
-This path is intended for quick inspection on a normal Linux machine. It verifies representative modules and testbenches without requiring the full Vivado simulator library stack.
+This runs on any Linux machine and checks representative modules and testbenches without the Vivado simulator libraries.
 
 ### Vivado and board demos
 
-Use the lab/part source directories as the design entry points. Each assignment keeps the Verilog modules, testbenches, and board constraints next to the relevant part, so the design can be inspected directly or imported into a Vivado project for synthesis/implementation.
+Each lab part keeps its Verilog modules, testbenches, and board constraints in one directory. Import that directory into a Vivado project to synthesize and implement it.
 
 For the full Nexys A7 demos:
 
@@ -121,5 +121,5 @@ For the full Nexys A7 demos:
 5. For Lab 3, connect the VGA output to view the image/sprite renderer.
 6. For Lab 4, connect the accelerometer/VGA setup to see live accelerometer movement drive the on-screen sprite.
 
-The Lab 4 extension is the most complete system-level demo: sensor input enters through the SPI accelerometer path, is interpreted by the Verilog control logic, and is then used by the reused VGA renderer to move a sprite on screen.
+The Lab 4 extension exercises the most hardware: SPI sensor input, Verilog control logic, and the reused VGA renderer.
 
